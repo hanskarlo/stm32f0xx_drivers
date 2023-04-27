@@ -1,0 +1,4 @@
+stm32f0xx_spi.c:13:6:SPI_PeriClockControl	6
+stm32f0xx_spi.c:34:6:SPI_Init	4
+stm32f0xx_spi.c:84:6:SPI_DeInit	1
+stm32f0xx_spi.c:94:6:SPI_SendData	1
