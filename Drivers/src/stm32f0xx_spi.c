@@ -87,26 +87,130 @@ void SPI_DeInit(SPI_Reg_t *SPIx)
 }
 
 
-
+/**
+ * @brief Returns SPix Status Register Flag status
+ * 
+ * @param SPIx SPIx register type ptr
+ * @param flagName SPI related status flags definitions in stm32f0xx_spi.h
+ * @return uint8_t 
+ */
 uint8_t SPI_GetFlagStatus(SPI_Reg_t *SPIx, uint32_t flagName)
 {
-    if (SPIx->SR & flagName)
-    {
-        return 
-    }
+    return (SPIx->SR & flagName);
 }
 
 
-
-void SPI_SendData(SPI_Reg_t *SPIx,uint8_t *pTxBuffer, uint32_t Len)
+/**
+ * @brief Send data over SPIx
+ * 
+ * @param SPIx SPIx register type ptr
+ * @param txBuffer Data array to send
+ * @param dataLen Length of data buffer
+ */
+void SPI_sendData(SPI_Reg_t *SPIx,uint8_t *txBuffer, uint32_t dataLen)
 {
+    //! if data length is 0, leave
+    if (!(dataLen > 0)) return;
 
-    if (Len > 0)
+
+
+    //* Check DFF
+    bool eightBit;
+    uint8_t dff = (SPIx->CR2 >> 8) & 0x0F;
+    
+    if ( dff & SPI_DFF_8BITS ) //< DFF is 8 bit
+        eightBit = true;
+    else if( dff & SPI_DFF_16BITS)
+        eightBit = false;
+
+
+
+    //* Load all data from txBuffer into SPI DR
+    while (dataLen > 0)
     {
         //* Check TX buffer
-        // while(!(SPIx->SR & 1))
-        while(SPI_GetFlagStatus(SPIx, SPI_TXE_FLAG) == FLAG_RESET); 
+        // Wait until TXE == 1 (TX buffer is empty)
+        while(SPI_GetFlagStatus(SPIx, SPI_TXE_FLAG) == NOT_EMPTY); 
 
+        if (eightBit) // load 8-bit data
+        {
+            // Load data register with data
+            SPIx->DR = *txBuffer;
+
+            // decrement data length counter
+            dataLen--;
+
+            // increment pointer in data buffer
+            txBuffer++;
+        }
+        else // Load 16-bit data
+        {
+            // Load data register with (16-bit) data
+            SPIx->DR = *(uint16_t *)txBuffer;
+
+            // Decrement data length counter (2 bytes loaded)
+            dataLen -= 2;
+
+            // Increment pointer (by 2 bytes) in data buffer
+            (uint16_t *)txBuffer++;
+        }
     }
 
+}
+
+
+/**
+ * @brief Read data from SPIx
+ * 
+ * @param SPIx SPIx register type ptr
+ * @param rxBuffer Data buffer array to store read data
+ * @param dataLen Length of data buffer
+ */
+void SPI_readData(SPI_Reg_t *SPIx, uint8_t *rxBuffer, uint32_t dataLen)
+{
+    //! if data length is 0, leave
+    if (!(dataLen > 0)) return;
+
+
+
+    //* Check DFF
+    bool eightBit;
+    uint8_t dff = (SPIx->CR2 >> 8) & 0x0F;
+    
+    if ( dff & SPI_DFF_8BITS ) //< DFF is 8 bit
+        eightBit = true;
+    else if( dff & SPI_DFF_16BITS)
+        eightBit = false;
+
+
+
+    while (dataLen > 0)
+    {
+        //* Check RX buffer
+        // Wait until RXNE == 1 (Rx buffer not empty)
+        while(SPI_GetFlagStatus(SPIx, SPI_RXNE_FLAG) == EMPTY);
+
+        if (eightBit) // 8-bit DFF
+        {
+            // Load byte into rxBuffer
+            *rxBuffer = SPIx->DR;
+
+            // Increment rxBuffer ptr
+            rxBuffer++;
+
+            // Decrement dataLen counter
+            dataLen--;
+        }
+        else // 16-bit DFF
+        {
+            // Load 16-bit data into rxBuffer
+            *(uint16_t *)rxBuffer = SPIx->DR;
+
+            // Increment rxBuffer ptr (by 16-bits)
+            (uint16_t *)rxBuffer++;
+
+            // Decrement dataLen counter (by 16-bits)
+            dataLen -= 2;
+        }
+    }
 }
