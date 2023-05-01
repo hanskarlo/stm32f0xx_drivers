@@ -109,6 +109,12 @@ typedef struct
 #define SPI_SSM_EN     1
 #define SPI_SSM_DI     0
 
+/*
+ * @SPI_SR 
+*/
+#define SPI_SR_TXE  0
+#define SPI_SR_RXNE 1
+#define SPI_SR_BSY  7
 
 /*
  * SPI related status flags definitions

@@ -88,10 +88,25 @@ void SPI_DeInit(SPI_Reg_t *SPIx)
 
 
 
-
-
-
-void SPI_SendData(SPI_Reg_t *pSPIx,uint8_t *pTxBuffer, uint32_t Len)
+uint8_t SPI_GetFlagStatus(SPI_Reg_t *SPIx, uint32_t flagName)
 {
+    if (SPIx->SR & flagName)
+    {
+        return 
+    }
+}
+
+
+
+void SPI_SendData(SPI_Reg_t *SPIx,uint8_t *pTxBuffer, uint32_t Len)
+{
+
+    if (Len > 0)
+    {
+        //* Check TX buffer
+        // while(!(SPIx->SR & 1))
+        while(SPI_GetFlagStatus(SPIx, SPI_TXE_FLAG) == FLAG_RESET); 
+
+    }
 
 }
