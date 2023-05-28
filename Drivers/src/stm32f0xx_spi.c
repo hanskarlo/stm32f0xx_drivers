@@ -79,7 +79,25 @@ void SPI_Init(SPI_Handle_t *SPIxHandle)
 
 }
 
+/**
+ * @brief SPI enable/disable function
+ * 
+ * @param SPIx SPI register type pointer
+ * @param enable ENABLE or DISABLE
+ */
+void SPI_Enable(SPI_Reg_t *SPIx, uint8_t enable)
+{
+    if (enable == ENABLE)
+    {
+        SPIx->CR1 |= (1 << SPI_CR1_SPE);
+    }
+    else
+    {
+        while (SPI_GetFlagStatus(SPIx, SPI_BUSY_FLAG)); //* Wait for busy flag to be cleared
 
+        SPIx->CR1 &= ~(1 << SPI_CR1_SPE);
+    }
+}
 
 void SPI_DeInit(SPI_Reg_t *SPIx)
 {
@@ -109,7 +127,7 @@ uint8_t SPI_GetFlagStatus(SPI_Reg_t *SPIx, uint32_t flagName)
  */
 void SPI_sendData(SPI_Reg_t *SPIx,uint8_t *txBuffer, uint32_t dataLen)
 {
-    //! if data length is 0, leave
+    //! if data length is 0, return
     if (!(dataLen > 0)) return;
 
 
@@ -214,3 +232,7 @@ void SPI_readData(SPI_Reg_t *SPIx, uint8_t *rxBuffer, uint32_t dataLen)
         }
     }
 }
+
+
+
+

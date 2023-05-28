@@ -256,7 +256,7 @@ void GPIO_IRQConfig(uint8_t IRQ_No, uint8_t IRQ_Prio, State toggle)
 	if (toggle == ENABLE)
 		*NVIC_ISER |= (1 << IRQ_No);
 	else
-		*NVIC_ICER |= (1 << IRQ_No);
+		*NVIC_ICER &= ~(1 << IRQ_No);
 
 
 	// Configure interrupt priority

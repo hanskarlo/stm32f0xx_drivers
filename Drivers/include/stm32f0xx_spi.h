@@ -110,6 +110,11 @@ typedef struct
 #define SPI_SSM_DI     0
 
 /*
+ * @SPI_CR1
+*/
+#define SPI_CR1_SPE 6
+
+/*
  * @SPI_SR 
 */
 #define SPI_SR_TXE  0
