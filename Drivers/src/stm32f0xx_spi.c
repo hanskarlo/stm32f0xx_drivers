@@ -93,12 +93,17 @@ void SPI_Enable(SPI_Reg_t *SPIx, uint8_t enable)
     }
     else
     {
-        while (SPI_GetFlagStatus(SPIx, SPI_BUSY_FLAG)); //* Wait for busy flag to be cleared
+        while (SPI_BUSY_FLAG(SPIx)); //* Wait for busy flag to be cleared
 
         SPIx->CR1 &= ~(1 << SPI_CR1_SPE);
     }
 }
 
+/**
+ * @brief 
+ * 
+ * @param SPIx 
+ */
 void SPI_DeInit(SPI_Reg_t *SPIx)
 {
 
@@ -125,22 +130,16 @@ uint8_t SPI_GetFlagStatus(SPI_Reg_t *SPIx, uint32_t flagName)
  * @param txBuffer Data array to send
  * @param dataLen Length of data buffer
  */
-void SPI_sendData(SPI_Reg_t *SPIx,uint8_t *txBuffer, uint32_t dataLen)
+void SPI_sendData(SPI_Reg_t *SPIx, uint8_t *txBuffer, uint32_t dataLen)
 {
-    //! if data length is 0, return
-    if (!(dataLen > 0)) return;
-
-
-
     //* Check DFF
     bool eightBit;
-    uint8_t dff = (SPIx->CR2 >> 8) & 0x0F;
+    uint8_t DFF = (SPIx->CR2 >> 8) & 0x0F;
     
-    if ( dff & SPI_DFF_8BITS ) //< DFF is 8 bit
+    if ( DFF & SPI_DFF_8BITS ) //< DFF is 8 bit
         eightBit = true;
-    else if( dff & SPI_DFF_16BITS)
+    else if( DFF & SPI_DFF_16BITS)
         eightBit = false;
-
 
 
     //* Load all data from txBuffer into SPI DR
@@ -148,7 +147,7 @@ void SPI_sendData(SPI_Reg_t *SPIx,uint8_t *txBuffer, uint32_t dataLen)
     {
         //* Check TX buffer
         // Wait until TXE == 1 (TX buffer is empty)
-        while(SPI_GetFlagStatus(SPIx, SPI_TXE_FLAG) == NOT_EMPTY); 
+//        while(SPI_GetFlagStatus(SPIx, SPI_TXE_FLAG) == NOT_EMPTY);
 
         if (eightBit) // load 8-bit data
         {
@@ -206,7 +205,7 @@ void SPI_readData(SPI_Reg_t *SPIx, uint8_t *rxBuffer, uint32_t dataLen)
     {
         //* Check RX buffer
         // Wait until RXNE == 1 (Rx buffer not empty)
-        while(SPI_GetFlagStatus(SPIx, SPI_RXNE_FLAG) == EMPTY);
+        while(SPI_RXNE_FLAG(SPIx));
 
         if (eightBit) // 8-bit DFF
         {
@@ -234,5 +233,157 @@ void SPI_readData(SPI_Reg_t *SPIx, uint8_t *rxBuffer, uint32_t dataLen)
 }
 
 
+/**
+ * @brief Send data 
+ * 
+ * @param pSPIHandle 
+ * @param pTxBuffer 
+ * @param Len 
+ * @return uint8_t 
+ */
+void SPI_sendDataIT(SPI_Handle_t *SPIxHandle, uint8_t *txBuffer_, uint32_t txlen_)
+{
+
+    if (SPIxHandle->txState != SPI_BUSY_IN_TX)
+    {
+        SPIxHandle->txBuffer = txBuffer_;
+        
+        SPIxHandle->txLen = txlen_;
+
+        SPIxHandle->txState = SPI_BUSY_IN_TX;
+
+        //* Enable TXEIE control bit
+        // generates interrupt when TXE set
+        SPIxHandle->SPIx->CR2 |= (1 << TXEIE);
+    }
 
 
+
+
+}
+
+
+/**
+ * @brief 
+ * 
+ * @param SPIx 
+ * @param rxBuffer 
+ * @param dataLen 
+ */
+void SPI_readDataIT(SPI_Handle_t *SPIxHandle, uint8_t *rxBuffer_, uint32_t rxLen_)
+{
+    SPIxHandle->rxBuffer = rxBuffer_;
+
+    SPIxHandle->rxLen = rxLen_;
+
+    SPIxHandle->rxState = SPI_BUSY_IN_RX;
+
+    //* Enable RXEIE control bit
+    // generates interrupt when RXNE set
+    SPIxHandle->SPIx->CR2 |= (1 << RXEIE);
+
+
+
+}
+
+/**
+ * @brief 
+ * 
+ * @param IRQNumber 
+ * @param EnorDi 
+ */
+void SPI_IRQInterruptConfig(uint8_t irqNo, State state)
+{
+
+}
+
+/**
+ * @brief 
+ * 
+ * @param IRQNumber 
+ * @param IRQPriority 
+ */
+void SPI_IRQPriorityConfig(uint8_t irqNo, uint32_t irqPrio)
+{
+
+}
+
+
+/**
+ * @brief Determines what type of SPI interrupt triggered (RXEIE, TXEIE, ERRIE)
+ * 
+ * @param pHandle 
+ */
+void SPI_IRQHandler(SPI_Handle_t *SPIxHandle)
+{
+    SPI_Reg_t *SPIx_ = SPIxHandle->SPIx;
+
+
+    //* TX interrupt
+    if (SPI_TXE_FLAG(SPIx_) && SPI_TXE_FLAG(SPIx_))
+    {
+        SPI_sendData(SPIxHandle->SPIx, SPIxHandle->txBuffer, SPIxHandle->txLen);
+
+
+        if (SPIxHandle->txLen <= 0)
+        {
+            if (SPIxHandle->SPIx->CR2 & (1 << TXEIE))
+                SPIxHandle->SPIx->CR2 &= ~(1 << TXEIE); //* Clear TXEIE bit after txBuffer sent
+            
+            SPIxHandle->txState = SPI_READY;
+
+            SPI_ApplicationEventCallback(SPIxHandle, SPI_EVENT_TX_CMPLT);
+        }
+
+    }         
+    
+
+    //* RX Interrupt
+    else if (SPI_RXNE_FLAG(SPIx_) && SPI_RXNE_FLAG(SPIx_))   
+    {
+        SPI_readData(SPIxHandle->SPIx, SPIxHandle->rxBuffer, SPIxHandle->rxLen);
+
+        if (SPIxHandle->rxLen <= 0)
+        {
+            if (SPIxHandle->SPIx->CR2 & (1 << RXEIE))
+                SPIxHandle->SPIx->CR2 &= ~(1 << TXEIE); //* Clear TXEIE bit after txBuffer sent
+            
+            SPIxHandle->rxState = SPI_READY;
+
+            SPI_ApplicationEventCallback(SPIxHandle, SPI_EVENT_RX_CMPLT);
+        }
+    }
+
+
+    //! Error interrupt
+    else if (SPI_ERR(SPIx_))      
+    {
+        if (SPIxHandle->txState != SPI_BUSY_IN_TX)
+        {
+
+        }
+
+        SPI_ApplicationEventCallback(SPIxHandle, SPI_EVENT_OVR_ERR);
+    }
+
+}
+
+__weak void SPI_ApplicationEventCallback(SPI_Handle_t *SPIxHandle, uint8_t AppEv)
+{
+
+    switch (AppEv)
+    {
+        case SPI_EVENT_TX_CMPLT:
+            break;
+        
+        case SPI_EVENT_RX_CMPLT:
+            break;
+        
+        case SPI_EVENT_CRC_ERR:
+            break;
+        
+        case SPI_EVENT_OVR_ERR:
+            break;
+    }
+
+}

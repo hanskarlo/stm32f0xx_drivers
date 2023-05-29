@@ -251,19 +251,19 @@ void GPIO_TogglePin(GPIO_Reg_t* GPIOx, uint8_t PinNo)
  * @param IRQ_No -- IRQ number (0-31)
  * @param IRQ_Prio -- IRQ priority (0-3, representing priority value 0-192 in steps of 64)
  */
-void GPIO_IRQConfig(uint8_t IRQ_No, uint8_t IRQ_Prio, State toggle)
+void GPIO_IRQConfig(uint8_t irqNo, uint8_t irqPrio, State toggle)
 {
 	if (toggle == ENABLE)
-		*NVIC_ISER |= (1 << IRQ_No);
+		*NVIC_ISER |= (1 << irqNo);
 	else
-		*NVIC_ICER &= ~(1 << IRQ_No);
+		*NVIC_ICER &= ~(1 << irqNo);
 
 
 	// Configure interrupt priority
-	uint8_t IPR_No = IRQ_No / 4;
-	uint8_t byteOffset = IRQ_No % 4;
+	uint8_t IPR_No = irqNo / 4;
+	uint8_t byteOffset = irqNo % 4;
 
-	*((uint8_t *)NVIC_IPR0 + (IPR_No * 4)) |= ( IRQ_Prio << ((8 * byteOffset) + 6) );
+	*((uint8_t *)NVIC_IPR0 + (IPR_No * 4)) |= ( irqPrio << ((8 * byteOffset) + 6) );
 }
 
 /*
