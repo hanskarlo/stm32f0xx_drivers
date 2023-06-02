@@ -230,30 +230,31 @@ typedef struct{
 
 
 /*
+ * I2C Peripheral register 
+ */
+#define I2C1            ((I2C_Reg_t *)I2C1_PERIPH_ADDR)
+#define I2C2            ((I2C_Reg_t *)I2C2_PERIPH_ADDR)
+
+/*
  * SPI Peripheral register
  */
 #define SPI1							((SPI_Reg_t*)SPI1_PERIPH_ADDR)
 #define SPI2							((SPI_Reg_t*)SPI2_PERIPH_ADDR)
 
 
-/**
+/*
  * RCC peripheral register typecasted to RCC_Reg_t
  */
 #define RCC				((RCC_Reg_t *)RCC_PERIPH_ADDR)
 
 
-
-
-/**
+/*
  * External interrupt
  */
 #define EXTI			((EXTI_Reg_t *)EXTI_BASE_ADDR)
 
 
-
-
-
-/**
+/*
  * System Configuration register
  */
 #define SYSCFG			((SYSCFG_Reg_t *)SYSCFG_BASE_ADDR)
@@ -315,11 +316,11 @@ typedef struct{
  * Clock enable macros for I2Cx peripherals
  */
 
-#define I2C1_CLK_EN			(RCC->APB1ENR |= (1 << 21))
-#define I2C2_CLK_EN			(RCC->APB1ENR |= (1 << 22))
+#define I2C1_CLK_EN()			(RCC->APB1ENR |= (1 << 21))
+#define I2C2_CLK_EN()			(RCC->APB1ENR |= (1 << 22))
 
-#define I2C1_CLK_DISABLE	(RCC->APB1ENR &= ~(1 << 21))
-#define I2C2_CLK_DISABLE	(RCC->APB1ENR &= ~(1 << 22))
+#define I2C1_CLK_DISABLE()	    (RCC->APB1ENR &= ~(1 << 21))
+#define I2C2_CLK_DISABLE()	    (RCC->APB1ENR &= ~(1 << 22))
 
 
 

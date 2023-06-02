@@ -6,14 +6,17 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Drivers/src/stm32f0xx_gpio.c \
+../Drivers/src/stm32f0xx_i2c.c \
 ../Drivers/src/stm32f0xx_spi.c 
 
 OBJS += \
 ./Drivers/src/stm32f0xx_gpio.o \
+./Drivers/src/stm32f0xx_i2c.o \
 ./Drivers/src/stm32f0xx_spi.o 
 
 C_DEPS += \
 ./Drivers/src/stm32f0xx_gpio.d \
+./Drivers/src/stm32f0xx_i2c.d \
 ./Drivers/src/stm32f0xx_spi.d 
 
 
@@ -24,7 +27,7 @@ Drivers/src/%.o Drivers/src/%.su: ../Drivers/src/%.c Drivers/src/subdir.mk
 clean: clean-Drivers-2f-src
 
 clean-Drivers-2f-src:
-	-$(RM) ./Drivers/src/stm32f0xx_gpio.d ./Drivers/src/stm32f0xx_gpio.o ./Drivers/src/stm32f0xx_gpio.su ./Drivers/src/stm32f0xx_spi.d ./Drivers/src/stm32f0xx_spi.o ./Drivers/src/stm32f0xx_spi.su
+	-$(RM) ./Drivers/src/stm32f0xx_gpio.d ./Drivers/src/stm32f0xx_gpio.o ./Drivers/src/stm32f0xx_gpio.su ./Drivers/src/stm32f0xx_i2c.d ./Drivers/src/stm32f0xx_i2c.o ./Drivers/src/stm32f0xx_i2c.su ./Drivers/src/stm32f0xx_spi.d ./Drivers/src/stm32f0xx_spi.o ./Drivers/src/stm32f0xx_spi.su
 
 .PHONY: clean-Drivers-2f-src
 
