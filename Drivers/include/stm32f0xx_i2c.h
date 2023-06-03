@@ -41,8 +41,14 @@ typedef struct
 #define I2C_BUSY_IN_TX  2
 
 #define I2C_SCL_SPEED_SM    100000
-#define I2C_SCL_SPEED_FM4K  400000
-#define I2C_SCL_SPEED_FM2K  200000
+#define I2C_SCL_SPEED_FM    400000
+#define I2C_SCL_SPEED_FMP   500000
+
+//* I2C_TIMINGR Register configs
+// From examples on page 665
+#define I2C_TIMINGR_SM      0x10420F13
+#define I2C_TIMINGR_FM      0x00310309
+#define I2C_TIMINGR_FMP     0x00010306
 
 #define I2C_ACK_ENABLE      1
 #define I2C_ACK_DISABLE     0
