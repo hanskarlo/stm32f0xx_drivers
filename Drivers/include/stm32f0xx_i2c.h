@@ -35,6 +35,7 @@ typedef struct
     uint32_t        rxlen;
 }I2C_Handle_t;
 
+#define I2C_DEFAULT_ADDRESS 0x04
 
 #define I2C_READY       0
 #define I2C_BUSY_IN_RX  1
@@ -60,11 +61,20 @@ typedef struct
 //* Register bit positions
 
 /*
+ * I2C Control Register (1) bit positions 
+*/
+#define I2C_CR1_PE      0
+
+/*
  * I2C Control Register (2) bit positions 
 */
+#define I2C_CR2_RD_WRN  10
 #define I2C_CR2_ADD10   11
 #define I2C_CR2_START   13
 #define I2C_CR2_STOP    14
+#define I2C_CR2_NBYTES  16
+#define I2C_CR2_RELOAD  24
+#define I2C_CR2_AUTOEND 25
 
 /*
  * I2C Interrupt and Status Register bit positions 
@@ -133,7 +143,7 @@ void I2C_DeInit(I2C_Reg_t *I2Cx);
 /*
  * Data Send and Receive
  */
-void I2C_MasterSendData(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint32_t len, uint8_t slaveAddr, uint8_t Sr);
+void I2C_MasterSendData(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint8_t len, uint8_t slaveAddr, uint8_t Sr);
 void I2C_MasterReceiveData(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t Sr);
 uint8_t I2C_MasterSendDataIT(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint32_t len, uint8_t slaveAddr, uint8_t Sr);
 uint8_t I2C_MasterReceiveDataIT(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t Sr);
