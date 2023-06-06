@@ -17,9 +17,11 @@ uint8_t APB_PreScaler[4] = {2, 4 , 8, 16};
 
 
 /**
- * @brief 
+ * @brief Returns the PCLK
  * 
- * @return uint32_t 
+ * @warning Written for STM32F072B-Disco
+ * 
+ * @return uint32_t - PCLK
  */
 uint32_t RCC_GetPCLKValue(void)
 {

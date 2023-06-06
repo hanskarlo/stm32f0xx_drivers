@@ -12,7 +12,7 @@
 #include "stm32f0xx_i2c.h"
 
 
-//**
+/*
  * @brief 
  * 
  * @param I2Cx 
@@ -38,7 +38,7 @@ void I2C_PeriClockControl(I2C_Reg_t *I2Cx, State enable)
     {
         if(I2Cx == I2C1)
             I2C1_CLK_EN();
-        else if (I2Cx == I2Cx)
+        else if (I2Cx == I2C2)
             I2C2_CLK_EN();
     }
     else
@@ -69,7 +69,9 @@ void I2C_Init(I2C_Handle_t *I2Cx_Handle)
         I2Cx_Handle->I2Cx->TIMINGR = I2C_TIMINGR_FM;
     else if (I2Cx_Handle->I2C_Config.sclSpeed == I2C_SCL_SPEED_FMP) // Fast mode+
         I2Cx_Handle->I2Cx->TIMINGR = I2C_TIMINGR_FMP;
-    
+
+    // Set AUTOEND; generate STOP automatically after NBYTES sent
+    I2Cx_Handle->I2Cx->CR2 |= (1 << I2C_CR2_AUTOEND);
 
     // Program address
     I2Cx_Handle->I2Cx->OAR1 |= (1 << 15); // Disable Own Address1
@@ -114,9 +116,6 @@ void I2C_MasterSendData(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint8_t dat
     // Number of bytes in send
     I2Cx_Handle->I2Cx->CR2 |= ~(dataLen << I2C_CR2_NBYTES);
 
-    // Set AUTOEND; generate STOP automatically after NBYTES sent
-    I2Cx_Handle->I2Cx->CR2 |= (1 << I2C_CR2_AUTOEND);
-
     //* Above params must be set before start generated
     // Generate START
     I2Cx_Handle->I2Cx->CR2 |= (1 << I2C_CR2_START);
@@ -124,14 +123,14 @@ void I2C_MasterSendData(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint8_t dat
 
     while (dataLen > 0)
     {
-        while( !I2Cx_Handle->I2Cx->ISR & (1 << I2C_ISR_TXE) ); // Block till TXDR empty
+        while( !(I2Cx_Handle->I2Cx->ISR & (1 << I2C_ISR_TXE)) ); // Block till TXDR empty
 
         I2Cx_Handle->I2Cx->TXDR = *txBuffer;
         txBuffer++;
         dataLen--;
     }
 
-
+    // AUTOEND enabled: usually have to wait for TC to be set, then send STOP
 }
 
 
@@ -140,13 +139,41 @@ void I2C_MasterSendData(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint8_t dat
  * 
  * @param I2Cx_Handle 
  * @param rxBuffer 
- * @param len 
+ * @param dataLen 
  * @param slaveAddr 
  * @param Sr 
  */
-void I2C_MasterReceiveData(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t Sr)
+void I2C_MasterReceiveData(I2C_Handle_t *I2Cx_Handle, uint8_t *rxBuffer, uint8_t dataLen, uint8_t slaveAddr, uint8_t Sr)
 {
+    // Set addressing mode
+    I2Cx_Handle->I2Cx->CR2 &= ~(1 << I2C_CR2_ADD10); // 7-bit
 
+    // Set slave address
+    I2Cx_Handle->I2Cx->CR2 |= (slaveAddr << 1);
+
+    // Transfer direction
+    I2Cx_Handle->I2Cx->CR2 |= (1 << I2C_CR2_RD_WRN); // Read
+
+    // Number of bytes in send
+    I2Cx_Handle->I2Cx->CR2 |= ~(dataLen << I2C_CR2_NBYTES);
+
+    //* Above params must be set before start generated
+    // Generate START
+    I2Cx_Handle->I2Cx->CR2 |= (1 << I2C_CR2_START);
+
+    // Read data
+    while (dataLen > 0)
+    {
+        while( !(I2Cx_Handle->I2Cx->ISR & (1 << I2C_ISR_RXNE)) ); // Block till RXDR not empty
+
+        *rxBuffer = I2Cx_Handle->I2Cx->RXDR;
+        rxBuffer++;
+        dataLen--;
+    }
+
+    // AUTOEND enabled:
+    // NACK automatically sent after last byte preceding STOP/RESTART condition
+    // Usually have to follow those steps here
 }
 
 

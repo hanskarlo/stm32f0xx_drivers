@@ -21,8 +21,6 @@ typedef struct
 {
     uint32_t sclSpeed;
     uint8_t  deviceAddress;
-    uint8_t  ackControl;
-    uint8_t  fmDutyCycle;
 }I2C_Config_t;
 
 typedef struct 
@@ -143,8 +141,8 @@ void I2C_DeInit(I2C_Reg_t *I2Cx);
 /*
  * Data Send and Receive
  */
-void I2C_MasterSendData(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint8_t len, uint8_t slaveAddr, uint8_t Sr);
-void I2C_MasterReceiveData(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t Sr);
+void I2C_MasterSendData(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint8_t dataLen, uint8_t slaveAddr, uint8_t Sr);
+void I2C_MasterReceiveData(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t dataLen, uint8_t slaveAddr, uint8_t Sr);
 uint8_t I2C_MasterSendDataIT(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint32_t len, uint8_t slaveAddr, uint8_t Sr);
 uint8_t I2C_MasterReceiveDataIT(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t Sr);
 

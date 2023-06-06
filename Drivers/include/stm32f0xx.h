@@ -205,6 +205,23 @@ typedef struct
     volatile uint32_t TXDR;
 }I2C_Reg_t;
 
+/*
+ * USART Register structure
+ */
+typedef struct 
+{
+    volatile uint32_t CR1;
+    volatile uint32_t CR2;
+    volatile uint32_t CR3;
+    volatile uint32_t BRR;
+    volatile uint32_t GTPR;
+    volatile uint32_t RTOR;
+    volatile uint32_t RQR;
+    volatile uint32_t ISR;
+    volatile uint32_t ICR;
+    volatile uint32_t RDR;
+    volatile uint32_t TDR;
+}USART_Reg_t;
 
 
 /**
@@ -230,17 +247,29 @@ typedef struct{
 
 
 /*
+ * SPI Peripheral register
+ */
+#define SPI1							((SPI_Reg_t*)SPI1_PERIPH_ADDR)
+#define SPI2							((SPI_Reg_t*)SPI2_PERIPH_ADDR)
+
+
+/*
  * I2C Peripheral register 
  */
 #define I2C1            ((I2C_Reg_t *)I2C1_PERIPH_ADDR)
 #define I2C2            ((I2C_Reg_t *)I2C2_PERIPH_ADDR)
 
 /*
- * SPI Peripheral register
- */
-#define SPI1							((SPI_Reg_t*)SPI1_PERIPH_ADDR)
-#define SPI2							((SPI_Reg_t*)SPI2_PERIPH_ADDR)
-
+ * UART Peripheral register
+*/
+#define USART1           ((USART_Reg_t *) USART1_PERIPH_ADDR)
+#define USART2           ((USART_Reg_t *) USART2_PERIPH_ADDR)
+#define USART3           ((USART_Reg_t *) USART3_PERIPH_ADDR)
+#define USART4           ((USART_Reg_t *) USART4_PERIPH_ADDR)
+#define USART5           ((USART_Reg_t *) USART5_PERIPH_ADDR)
+#define USART6           ((USART_Reg_t *) USART6_PERIPH_ADDR)
+#define USART7           ((USART_Reg_t *) USART7_PERIPH_ADDR)
+#define USART8           ((USART_Reg_t *) USART8_PERIPH_ADDR)
 
 /*
  * RCC peripheral register typecasted to RCC_Reg_t
@@ -342,23 +371,23 @@ typedef struct{
  * Clock enable macros for USART peripherals
  */
 
-#define USART1_CLK_EN		(RCC->APB2ENR |= (1 << 14))
-#define USART2_CLK_EN		(RCC->APB1ENR |= (1 << 17))
-#define USART3_CLK_EN		(RCC->APB1ENR |= (1 << 18))
-#define USART4_CLK_EN		(RCC->APB1ENR |= (1 << 19))
-#define USART5_CLK_EN		(RCC->APB1ENR |= (1 << 20))
-#define USART6_CLK_EN		(RCC->APB2ENR |= (1 << 5))
-#define USART7_CLK_EN		(RCC->APB2ENR |= (1 << 6))
-#define USART8_CLK_EN		(RCC->APB2ENR |= (1 << 7))
+#define USART1_CLK_EN()		(RCC->APB2ENR |= (1 << 14))
+#define USART2_CLK_EN()		(RCC->APB1ENR |= (1 << 17))
+#define USART3_CLK_EN()		(RCC->APB1ENR |= (1 << 18))
+#define USART4_CLK_EN()		(RCC->APB1ENR |= (1 << 19))
+#define USART5_CLK_EN()		(RCC->APB1ENR |= (1 << 20))
+#define USART6_CLK_EN()		(RCC->APB2ENR |= (1 << 5))
+#define USART7_CLK_EN()		(RCC->APB2ENR |= (1 << 6))
+#define USART8_CLK_EN()		(RCC->APB2ENR |= (1 << 7))
 
-#define USART1_CLK_DISABLE	(RCC->APB2ENR |= (1 << 14))
-#define USART2_CLK_DISABLE	(RCC->APB1ENR |= (1 << 17))
-#define USART3_CLK_DISABLE	(RCC->APB1ENR |= (1 << 18))
-#define USART4_CLK_DISABLE	(RCC->APB1ENR |= (1 << 19))
-#define USART5_CLK_DISABLE	(RCC->APB1ENR |= (1 << 20))
-#define USART6_CLK_DISABLE	(RCC->APB2ENR |= (1 << 5))
-#define USART7_CLK_DISABLE	(RCC->APB2ENR |= (1 << 6))
-#define USART8_CLK_DISABLE	(RCC->APB2ENR |= (1 << 7))
+#define USART1_CLK_DISABLE()	(RCC->APB2ENR |= (1 << 14))
+#define USART2_CLK_DISABLE()	(RCC->APB1ENR |= (1 << 17))
+#define USART3_CLK_DISABLE()	(RCC->APB1ENR |= (1 << 18))
+#define USART4_CLK_DISABLE()	(RCC->APB1ENR |= (1 << 19))
+#define USART5_CLK_DISABLE()	(RCC->APB1ENR |= (1 << 20))
+#define USART6_CLK_DISABLE()	(RCC->APB2ENR |= (1 << 5))
+#define USART7_CLK_DISABLE()	(RCC->APB2ENR |= (1 << 6))
+#define USART8_CLK_DISABLE()	(RCC->APB2ENR |= (1 << 7))
 
 
 
