@@ -1,3 +1,4 @@
+"./Drivers/src/scd41.o"
 "./Drivers/src/stm32f0xx_gpio.o"
 "./Drivers/src/stm32f0xx_i2c.o"
 "./Drivers/src/stm32f0xx_rcc.o"

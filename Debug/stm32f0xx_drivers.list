@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000028  00000000  00000000  0001081c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00000f2b  00000000  00000000  00010844  2**0
+ 12 .debug_info   00001115  00000000  00000000  00010844  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 000003e8  00000000  00000000  0001176f  2**0
+ 13 .debug_abbrev 000004ec  00000000  00000000  00011959  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00000100  00000000  00000000  00011b58  2**3
+ 14 .debug_aranges 00000110  00000000  00000000  00011e48  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 000000c8  00000000  00000000  00011c58  2**3
+ 15 .debug_ranges 000000d8  00000000  00000000  00011f58  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00002512  00000000  00000000  00011d20  2**0
+ 16 .debug_macro  00001afb  00000000  00000000  00012030  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00001464  00000000  00000000  00014232  2**0
+ 17 .debug_line   000014e9  00000000  00000000  00013b2b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0000975f  00000000  00000000  00015696  2**0
+ 18 .debug_str    00009e72  00000000  00000000  00015014  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  0001edf5  2**0
+ 19 .comment      00000050  00000000  00000000  0001ee86  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  000002b8  00000000  00000000  0001ee48  2**2
+ 20 .debug_frame  000002f8  00000000  00000000  0001eed8  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -227,7 +227,7 @@ Disassembly of section .text:
  800021c:	4770      	bx	lr
  800021e:	46c0      	nop			; (mov r8, r8)
 
-08000220 <GPIO_Init>:
+08000220 <_Z9GPIO_InitP13GPIO_Handle_t>:
  * @brief
  *
  * @param GPIO_Handle_t* - GPIO handle for peripheral base address and config
@@ -281,7 +281,7 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  8000264:	183b      	adds	r3, r7, r0
  8000266:	781b      	ldrb	r3, [r3, #0]
  8000268:	2b03      	cmp	r3, #3
- 800026a:	d81f      	bhi.n	80002ac <GPIO_Init+0x8c>
+ 800026a:	d81f      	bhi.n	80002ac <_Z9GPIO_InitP13GPIO_Handle_t+0x8c>
 	{
 		GPIOHandle->GPIOx->MODER &= ~(0x3 << (2 * pinNo));
  800026c:	687b      	ldr	r3, [r7, #4]
@@ -316,7 +316,7 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  80002a4:	681b      	ldr	r3, [r3, #0]
  80002a6:	430a      	orrs	r2, r1
  80002a8:	601a      	str	r2, [r3, #0]
- 80002aa:	e0b2      	b.n	8000412 <GPIO_Init+0x1f2>
+ 80002aa:	e0b2      	b.n	8000412 <_Z9GPIO_InitP13GPIO_Handle_t+0x1f2>
 	}
 	else
 	{
@@ -325,11 +325,11 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  80002ae:	18fb      	adds	r3, r7, r3
  80002b0:	781b      	ldrb	r3, [r3, #0]
  80002b2:	2b04      	cmp	r3, #4
- 80002b4:	d118      	bne.n	80002e8 <GPIO_Init+0xc8>
+ 80002b4:	d118      	bne.n	80002e8 <_Z9GPIO_InitP13GPIO_Handle_t+0xc8>
 		{
 			// Set corresponding bit in FTSR
 			EXTI->EXTI_FTSR |= (1 << pinNo);
- 80002b6:	4ba8      	ldr	r3, [pc, #672]	; (8000558 <GPIO_Init+0x338>)
+ 80002b6:	4ba8      	ldr	r3, [pc, #672]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  80002b8:	68da      	ldr	r2, [r3, #12]
  80002ba:	2016      	movs	r0, #22
  80002bc:	183b      	adds	r3, r7, r0
@@ -338,13 +338,13 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  80002c2:	4099      	lsls	r1, r3
  80002c4:	000b      	movs	r3, r1
  80002c6:	0019      	movs	r1, r3
- 80002c8:	4ba3      	ldr	r3, [pc, #652]	; (8000558 <GPIO_Init+0x338>)
+ 80002c8:	4ba3      	ldr	r3, [pc, #652]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  80002ca:	430a      	orrs	r2, r1
  80002cc:	60da      	str	r2, [r3, #12]
 
 			// Clear corresponding bit in RTSR
 			EXTI->EXTI_RTSR &= ~(1 << pinNo);
- 80002ce:	4ba2      	ldr	r3, [pc, #648]	; (8000558 <GPIO_Init+0x338>)
+ 80002ce:	4ba2      	ldr	r3, [pc, #648]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  80002d0:	689a      	ldr	r2, [r3, #8]
  80002d2:	183b      	adds	r3, r7, r0
  80002d4:	781b      	ldrb	r3, [r3, #0]
@@ -353,10 +353,10 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  80002da:	000b      	movs	r3, r1
  80002dc:	43db      	mvns	r3, r3
  80002de:	0019      	movs	r1, r3
- 80002e0:	4b9d      	ldr	r3, [pc, #628]	; (8000558 <GPIO_Init+0x338>)
+ 80002e0:	4b9d      	ldr	r3, [pc, #628]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  80002e2:	400a      	ands	r2, r1
  80002e4:	609a      	str	r2, [r3, #8]
- 80002e6:	e039      	b.n	800035c <GPIO_Init+0x13c>
+ 80002e6:	e039      	b.n	800035c <_Z9GPIO_InitP13GPIO_Handle_t+0x13c>
 
 
 		}
@@ -365,11 +365,11 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  80002ea:	18fb      	adds	r3, r7, r3
  80002ec:	781b      	ldrb	r3, [r3, #0]
  80002ee:	2b05      	cmp	r3, #5
- 80002f0:	d118      	bne.n	8000324 <GPIO_Init+0x104>
+ 80002f0:	d118      	bne.n	8000324 <_Z9GPIO_InitP13GPIO_Handle_t+0x104>
 		{
 			// Set corresponding bit in RTSR
 			EXTI->EXTI_RTSR |= (1 << pinNo);
- 80002f2:	4b99      	ldr	r3, [pc, #612]	; (8000558 <GPIO_Init+0x338>)
+ 80002f2:	4b99      	ldr	r3, [pc, #612]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  80002f4:	689a      	ldr	r2, [r3, #8]
  80002f6:	2016      	movs	r0, #22
  80002f8:	183b      	adds	r3, r7, r0
@@ -378,13 +378,13 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  80002fe:	4099      	lsls	r1, r3
  8000300:	000b      	movs	r3, r1
  8000302:	0019      	movs	r1, r3
- 8000304:	4b94      	ldr	r3, [pc, #592]	; (8000558 <GPIO_Init+0x338>)
+ 8000304:	4b94      	ldr	r3, [pc, #592]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  8000306:	430a      	orrs	r2, r1
  8000308:	609a      	str	r2, [r3, #8]
 
 			// Clear corresponding bit in RTSR
 			EXTI->EXTI_FTSR &= ~(1 << pinNo);
- 800030a:	4b93      	ldr	r3, [pc, #588]	; (8000558 <GPIO_Init+0x338>)
+ 800030a:	4b93      	ldr	r3, [pc, #588]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  800030c:	68da      	ldr	r2, [r3, #12]
  800030e:	183b      	adds	r3, r7, r0
  8000310:	781b      	ldrb	r3, [r3, #0]
@@ -393,21 +393,21 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  8000316:	000b      	movs	r3, r1
  8000318:	43db      	mvns	r3, r3
  800031a:	0019      	movs	r1, r3
- 800031c:	4b8e      	ldr	r3, [pc, #568]	; (8000558 <GPIO_Init+0x338>)
+ 800031c:	4b8e      	ldr	r3, [pc, #568]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  800031e:	400a      	ands	r2, r1
  8000320:	60da      	str	r2, [r3, #12]
- 8000322:	e01b      	b.n	800035c <GPIO_Init+0x13c>
+ 8000322:	e01b      	b.n	800035c <_Z9GPIO_InitP13GPIO_Handle_t+0x13c>
 		}
 		else if (pinMode == INT_CHANGE)
  8000324:	2317      	movs	r3, #23
  8000326:	18fb      	adds	r3, r7, r3
  8000328:	781b      	ldrb	r3, [r3, #0]
  800032a:	2b06      	cmp	r3, #6
- 800032c:	d116      	bne.n	800035c <GPIO_Init+0x13c>
+ 800032c:	d116      	bne.n	800035c <_Z9GPIO_InitP13GPIO_Handle_t+0x13c>
 		{
 			// Set both corresponding bits in FTSR and RTSR
 			EXTI->EXTI_FTSR |= (1 << pinNo);
- 800032e:	4b8a      	ldr	r3, [pc, #552]	; (8000558 <GPIO_Init+0x338>)
+ 800032e:	4b8a      	ldr	r3, [pc, #552]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  8000330:	68da      	ldr	r2, [r3, #12]
  8000332:	2016      	movs	r0, #22
  8000334:	183b      	adds	r3, r7, r0
@@ -416,11 +416,11 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  800033a:	4099      	lsls	r1, r3
  800033c:	000b      	movs	r3, r1
  800033e:	0019      	movs	r1, r3
- 8000340:	4b85      	ldr	r3, [pc, #532]	; (8000558 <GPIO_Init+0x338>)
+ 8000340:	4b85      	ldr	r3, [pc, #532]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  8000342:	430a      	orrs	r2, r1
  8000344:	60da      	str	r2, [r3, #12]
 			EXTI->EXTI_RTSR |= (1 << pinNo);
- 8000346:	4b84      	ldr	r3, [pc, #528]	; (8000558 <GPIO_Init+0x338>)
+ 8000346:	4b84      	ldr	r3, [pc, #528]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  8000348:	689a      	ldr	r2, [r3, #8]
  800034a:	183b      	adds	r3, r7, r0
  800034c:	781b      	ldrb	r3, [r3, #0]
@@ -428,7 +428,7 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  8000350:	4099      	lsls	r1, r3
  8000352:	000b      	movs	r3, r1
  8000354:	0019      	movs	r1, r3
- 8000356:	4b80      	ldr	r3, [pc, #512]	; (8000558 <GPIO_Init+0x338>)
+ 8000356:	4b80      	ldr	r3, [pc, #512]	; (8000558 <_Z9GPIO_InitP13GPIO_Handle_t+0x338>)
  8000358:	430a      	orrs	r2, r1
  800035a:	609a      	str	r2, [r3, #8]
 		}
@@ -461,50 +461,50 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  8000388:	2390      	movs	r3, #144	; 0x90
  800038a:	05db      	lsls	r3, r3, #23
  800038c:	429a      	cmp	r2, r3
- 800038e:	d024      	beq.n	80003da <GPIO_Init+0x1ba>
+ 800038e:	d024      	beq.n	80003da <_Z9GPIO_InitP13GPIO_Handle_t+0x1ba>
  8000390:	687b      	ldr	r3, [r7, #4]
  8000392:	681b      	ldr	r3, [r3, #0]
- 8000394:	4a71      	ldr	r2, [pc, #452]	; (800055c <GPIO_Init+0x33c>)
+ 8000394:	4a71      	ldr	r2, [pc, #452]	; (800055c <_Z9GPIO_InitP13GPIO_Handle_t+0x33c>)
  8000396:	4293      	cmp	r3, r2
- 8000398:	d01d      	beq.n	80003d6 <GPIO_Init+0x1b6>
+ 8000398:	d01d      	beq.n	80003d6 <_Z9GPIO_InitP13GPIO_Handle_t+0x1b6>
  800039a:	687b      	ldr	r3, [r7, #4]
  800039c:	681b      	ldr	r3, [r3, #0]
- 800039e:	4a70      	ldr	r2, [pc, #448]	; (8000560 <GPIO_Init+0x340>)
+ 800039e:	4a70      	ldr	r2, [pc, #448]	; (8000560 <_Z9GPIO_InitP13GPIO_Handle_t+0x340>)
  80003a0:	4293      	cmp	r3, r2
- 80003a2:	d016      	beq.n	80003d2 <GPIO_Init+0x1b2>
+ 80003a2:	d016      	beq.n	80003d2 <_Z9GPIO_InitP13GPIO_Handle_t+0x1b2>
  80003a4:	687b      	ldr	r3, [r7, #4]
  80003a6:	681b      	ldr	r3, [r3, #0]
- 80003a8:	4a6e      	ldr	r2, [pc, #440]	; (8000564 <GPIO_Init+0x344>)
+ 80003a8:	4a6e      	ldr	r2, [pc, #440]	; (8000564 <_Z9GPIO_InitP13GPIO_Handle_t+0x344>)
  80003aa:	4293      	cmp	r3, r2
- 80003ac:	d00f      	beq.n	80003ce <GPIO_Init+0x1ae>
+ 80003ac:	d00f      	beq.n	80003ce <_Z9GPIO_InitP13GPIO_Handle_t+0x1ae>
  80003ae:	687b      	ldr	r3, [r7, #4]
  80003b0:	681b      	ldr	r3, [r3, #0]
- 80003b2:	4a6d      	ldr	r2, [pc, #436]	; (8000568 <GPIO_Init+0x348>)
+ 80003b2:	4a6d      	ldr	r2, [pc, #436]	; (8000568 <_Z9GPIO_InitP13GPIO_Handle_t+0x348>)
  80003b4:	4293      	cmp	r3, r2
- 80003b6:	d008      	beq.n	80003ca <GPIO_Init+0x1aa>
+ 80003b6:	d008      	beq.n	80003ca <_Z9GPIO_InitP13GPIO_Handle_t+0x1aa>
  80003b8:	687b      	ldr	r3, [r7, #4]
  80003ba:	681b      	ldr	r3, [r3, #0]
- 80003bc:	4a6b      	ldr	r2, [pc, #428]	; (800056c <GPIO_Init+0x34c>)
+ 80003bc:	4a6b      	ldr	r2, [pc, #428]	; (800056c <_Z9GPIO_InitP13GPIO_Handle_t+0x34c>)
  80003be:	4293      	cmp	r3, r2
- 80003c0:	d101      	bne.n	80003c6 <GPIO_Init+0x1a6>
+ 80003c0:	d101      	bne.n	80003c6 <_Z9GPIO_InitP13GPIO_Handle_t+0x1a6>
  80003c2:	2306      	movs	r3, #6
- 80003c4:	e00a      	b.n	80003dc <GPIO_Init+0x1bc>
+ 80003c4:	e00a      	b.n	80003dc <_Z9GPIO_InitP13GPIO_Handle_t+0x1bc>
  80003c6:	2300      	movs	r3, #0
- 80003c8:	e008      	b.n	80003dc <GPIO_Init+0x1bc>
+ 80003c8:	e008      	b.n	80003dc <_Z9GPIO_InitP13GPIO_Handle_t+0x1bc>
  80003ca:	2305      	movs	r3, #5
- 80003cc:	e006      	b.n	80003dc <GPIO_Init+0x1bc>
+ 80003cc:	e006      	b.n	80003dc <_Z9GPIO_InitP13GPIO_Handle_t+0x1bc>
  80003ce:	2304      	movs	r3, #4
- 80003d0:	e004      	b.n	80003dc <GPIO_Init+0x1bc>
+ 80003d0:	e004      	b.n	80003dc <_Z9GPIO_InitP13GPIO_Handle_t+0x1bc>
  80003d2:	2303      	movs	r3, #3
- 80003d4:	e002      	b.n	80003dc <GPIO_Init+0x1bc>
+ 80003d4:	e002      	b.n	80003dc <_Z9GPIO_InitP13GPIO_Handle_t+0x1bc>
  80003d6:	2302      	movs	r3, #2
- 80003d8:	e000      	b.n	80003dc <GPIO_Init+0x1bc>
+ 80003d8:	e000      	b.n	80003dc <_Z9GPIO_InitP13GPIO_Handle_t+0x1bc>
  80003da:	2300      	movs	r3, #0
  80003dc:	210f      	movs	r1, #15
  80003de:	187a      	adds	r2, r7, r1
  80003e0:	7013      	strb	r3, [r2, #0]
 		SYSCFG->EXTICR[regNum] |= portCode << portMaskPos;
- 80003e2:	4a63      	ldr	r2, [pc, #396]	; (8000570 <GPIO_Init+0x350>)
+ 80003e2:	4a63      	ldr	r2, [pc, #396]	; (8000570 <_Z9GPIO_InitP13GPIO_Handle_t+0x350>)
  80003e4:	2411      	movs	r4, #17
  80003e6:	193b      	adds	r3, r7, r4
  80003e8:	781b      	ldrb	r3, [r3, #0]
@@ -520,7 +520,7 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  80003fc:	4099      	lsls	r1, r3
  80003fe:	000b      	movs	r3, r1
  8000400:	0018      	movs	r0, r3
- 8000402:	495b      	ldr	r1, [pc, #364]	; (8000570 <GPIO_Init+0x350>)
+ 8000402:	495b      	ldr	r1, [pc, #364]	; (8000570 <_Z9GPIO_InitP13GPIO_Handle_t+0x350>)
  8000404:	193b      	adds	r3, r7, r4
  8000406:	781b      	ldrb	r3, [r3, #0]
  8000408:	4302      	orrs	r2, r0
@@ -645,7 +645,7 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  80004cc:	18fb      	adds	r3, r7, r3
  80004ce:	781b      	ldrb	r3, [r3, #0]
  80004d0:	2b02      	cmp	r3, #2
- 80004d2:	d13c      	bne.n	800054e <GPIO_Init+0x32e>
+ 80004d2:	d13c      	bne.n	800054e <_Z9GPIO_InitP13GPIO_Handle_t+0x32e>
 	{
 		uint8_t index = pinNo / 8;
  80004d4:	210e      	movs	r1, #14
@@ -730,7 +730,7 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
  800056c:	48001400 	.word	0x48001400
  8000570:	40010000 	.word	0x40010000
 
-08000574 <I2C_PeriClockControl>:
+08000574 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State>:
  * 
  * @param I2Cx 
  * @param enable 
@@ -748,17 +748,17 @@ void I2C_PeriClockControl(I2C_Reg_t *I2Cx, State enable)
  8000582:	1cfb      	adds	r3, r7, #3
  8000584:	781b      	ldrb	r3, [r3, #0]
  8000586:	2b00      	cmp	r3, #0
- 8000588:	d117      	bne.n	80005ba <I2C_PeriClockControl+0x46>
+ 8000588:	d117      	bne.n	80005ba <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x46>
     {
         if(I2Cx == I2C1)
  800058a:	687b      	ldr	r3, [r7, #4]
- 800058c:	4a17      	ldr	r2, [pc, #92]	; (80005ec <I2C_PeriClockControl+0x78>)
+ 800058c:	4a17      	ldr	r2, [pc, #92]	; (80005ec <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x78>)
  800058e:	4293      	cmp	r3, r2
- 8000590:	d107      	bne.n	80005a2 <I2C_PeriClockControl+0x2e>
+ 8000590:	d107      	bne.n	80005a2 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x2e>
             I2C1_CLK_EN();
- 8000592:	4b17      	ldr	r3, [pc, #92]	; (80005f0 <I2C_PeriClockControl+0x7c>)
+ 8000592:	4b17      	ldr	r3, [pc, #92]	; (80005f0 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x7c>)
  8000594:	69da      	ldr	r2, [r3, #28]
- 8000596:	4b16      	ldr	r3, [pc, #88]	; (80005f0 <I2C_PeriClockControl+0x7c>)
+ 8000596:	4b16      	ldr	r3, [pc, #88]	; (80005f0 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x7c>)
  8000598:	2180      	movs	r1, #128	; 0x80
  800059a:	0389      	lsls	r1, r1, #14
  800059c:	430a      	orrs	r2, r1
@@ -769,46 +769,46 @@ void I2C_PeriClockControl(I2C_Reg_t *I2Cx, State enable)
             I2C2_CLK_DISABLE();
     }
 }
- 80005a0:	e020      	b.n	80005e4 <I2C_PeriClockControl+0x70>
+ 80005a0:	e020      	b.n	80005e4 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x70>
         else if (I2Cx == I2C2)
  80005a2:	687b      	ldr	r3, [r7, #4]
- 80005a4:	4a13      	ldr	r2, [pc, #76]	; (80005f4 <I2C_PeriClockControl+0x80>)
+ 80005a4:	4a13      	ldr	r2, [pc, #76]	; (80005f4 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x80>)
  80005a6:	4293      	cmp	r3, r2
- 80005a8:	d11c      	bne.n	80005e4 <I2C_PeriClockControl+0x70>
+ 80005a8:	d11c      	bne.n	80005e4 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x70>
             I2C2_CLK_EN();
- 80005aa:	4b11      	ldr	r3, [pc, #68]	; (80005f0 <I2C_PeriClockControl+0x7c>)
+ 80005aa:	4b11      	ldr	r3, [pc, #68]	; (80005f0 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x7c>)
  80005ac:	69da      	ldr	r2, [r3, #28]
- 80005ae:	4b10      	ldr	r3, [pc, #64]	; (80005f0 <I2C_PeriClockControl+0x7c>)
+ 80005ae:	4b10      	ldr	r3, [pc, #64]	; (80005f0 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x7c>)
  80005b0:	2180      	movs	r1, #128	; 0x80
  80005b2:	03c9      	lsls	r1, r1, #15
  80005b4:	430a      	orrs	r2, r1
  80005b6:	61da      	str	r2, [r3, #28]
 }
- 80005b8:	e014      	b.n	80005e4 <I2C_PeriClockControl+0x70>
+ 80005b8:	e014      	b.n	80005e4 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x70>
         if (I2Cx == I2C1)
  80005ba:	687b      	ldr	r3, [r7, #4]
- 80005bc:	4a0b      	ldr	r2, [pc, #44]	; (80005ec <I2C_PeriClockControl+0x78>)
+ 80005bc:	4a0b      	ldr	r2, [pc, #44]	; (80005ec <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x78>)
  80005be:	4293      	cmp	r3, r2
- 80005c0:	d106      	bne.n	80005d0 <I2C_PeriClockControl+0x5c>
+ 80005c0:	d106      	bne.n	80005d0 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x5c>
             I2C1_CLK_DISABLE();
- 80005c2:	4b0b      	ldr	r3, [pc, #44]	; (80005f0 <I2C_PeriClockControl+0x7c>)
+ 80005c2:	4b0b      	ldr	r3, [pc, #44]	; (80005f0 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x7c>)
  80005c4:	69da      	ldr	r2, [r3, #28]
- 80005c6:	4b0a      	ldr	r3, [pc, #40]	; (80005f0 <I2C_PeriClockControl+0x7c>)
- 80005c8:	490b      	ldr	r1, [pc, #44]	; (80005f8 <I2C_PeriClockControl+0x84>)
+ 80005c6:	4b0a      	ldr	r3, [pc, #40]	; (80005f0 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x7c>)
+ 80005c8:	490b      	ldr	r1, [pc, #44]	; (80005f8 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x84>)
  80005ca:	400a      	ands	r2, r1
  80005cc:	61da      	str	r2, [r3, #28]
 }
- 80005ce:	e009      	b.n	80005e4 <I2C_PeriClockControl+0x70>
+ 80005ce:	e009      	b.n	80005e4 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x70>
         else if (I2Cx == I2C2)
  80005d0:	687b      	ldr	r3, [r7, #4]
- 80005d2:	4a08      	ldr	r2, [pc, #32]	; (80005f4 <I2C_PeriClockControl+0x80>)
+ 80005d2:	4a08      	ldr	r2, [pc, #32]	; (80005f4 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x80>)
  80005d4:	4293      	cmp	r3, r2
- 80005d6:	d105      	bne.n	80005e4 <I2C_PeriClockControl+0x70>
+ 80005d6:	d105      	bne.n	80005e4 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x70>
             I2C2_CLK_DISABLE();
- 80005d8:	4b05      	ldr	r3, [pc, #20]	; (80005f0 <I2C_PeriClockControl+0x7c>)
+ 80005d8:	4b05      	ldr	r3, [pc, #20]	; (80005f0 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x7c>)
  80005da:	69da      	ldr	r2, [r3, #28]
- 80005dc:	4b04      	ldr	r3, [pc, #16]	; (80005f0 <I2C_PeriClockControl+0x7c>)
- 80005de:	4907      	ldr	r1, [pc, #28]	; (80005fc <I2C_PeriClockControl+0x88>)
+ 80005dc:	4b04      	ldr	r3, [pc, #16]	; (80005f0 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x7c>)
+ 80005de:	4907      	ldr	r1, [pc, #28]	; (80005fc <_Z20I2C_PeriClockControlP9I2C_Reg_t5State+0x88>)
  80005e0:	400a      	ands	r2, r1
  80005e2:	61da      	str	r2, [r3, #28]
 }
@@ -822,7 +822,7 @@ void I2C_PeriClockControl(I2C_Reg_t *I2Cx, State enable)
  80005f8:	ffdfffff 	.word	0xffdfffff
  80005fc:	ffbfffff 	.word	0xffbfffff
 
-08000600 <I2C_Init>:
+08000600 <_Z8I2C_InitP12I2C_Handle_t>:
  * @brief 
  * 
  * @param I2Cx_Handle 
@@ -839,44 +839,44 @@ void I2C_Init(I2C_Handle_t *I2Cx_Handle)
  800060a:	681b      	ldr	r3, [r3, #0]
  800060c:	2100      	movs	r1, #0
  800060e:	0018      	movs	r0, r3
- 8000610:	f7ff ffb0 	bl	8000574 <I2C_PeriClockControl>
+ 8000610:	f7ff ffb0 	bl	8000574 <_Z20I2C_PeriClockControlP9I2C_Reg_t5State>
 
 
     // Configure freq
     if (I2Cx_Handle->I2C_Config.sclSpeed == I2C_SCL_SPEED_SM) // Standard
  8000614:	687b      	ldr	r3, [r7, #4]
  8000616:	685b      	ldr	r3, [r3, #4]
- 8000618:	4a26      	ldr	r2, [pc, #152]	; (80006b4 <I2C_Init+0xb4>)
+ 8000618:	4a26      	ldr	r2, [pc, #152]	; (80006b4 <_Z8I2C_InitP12I2C_Handle_t+0xb4>)
  800061a:	4293      	cmp	r3, r2
- 800061c:	d104      	bne.n	8000628 <I2C_Init+0x28>
+ 800061c:	d104      	bne.n	8000628 <_Z8I2C_InitP12I2C_Handle_t+0x28>
         I2Cx_Handle->I2Cx->TIMINGR = I2C_TIMINGR_SM;
  800061e:	687b      	ldr	r3, [r7, #4]
  8000620:	681b      	ldr	r3, [r3, #0]
- 8000622:	4a25      	ldr	r2, [pc, #148]	; (80006b8 <I2C_Init+0xb8>)
+ 8000622:	4a25      	ldr	r2, [pc, #148]	; (80006b8 <_Z8I2C_InitP12I2C_Handle_t+0xb8>)
  8000624:	611a      	str	r2, [r3, #16]
- 8000626:	e012      	b.n	800064e <I2C_Init+0x4e>
+ 8000626:	e012      	b.n	800064e <_Z8I2C_InitP12I2C_Handle_t+0x4e>
     else if (I2Cx_Handle->I2C_Config.sclSpeed == I2C_SCL_SPEED_FM) // Fast
  8000628:	687b      	ldr	r3, [r7, #4]
  800062a:	685b      	ldr	r3, [r3, #4]
- 800062c:	4a23      	ldr	r2, [pc, #140]	; (80006bc <I2C_Init+0xbc>)
+ 800062c:	4a23      	ldr	r2, [pc, #140]	; (80006bc <_Z8I2C_InitP12I2C_Handle_t+0xbc>)
  800062e:	4293      	cmp	r3, r2
- 8000630:	d104      	bne.n	800063c <I2C_Init+0x3c>
+ 8000630:	d104      	bne.n	800063c <_Z8I2C_InitP12I2C_Handle_t+0x3c>
         I2Cx_Handle->I2Cx->TIMINGR = I2C_TIMINGR_FM;
  8000632:	687b      	ldr	r3, [r7, #4]
  8000634:	681b      	ldr	r3, [r3, #0]
- 8000636:	4a22      	ldr	r2, [pc, #136]	; (80006c0 <I2C_Init+0xc0>)
+ 8000636:	4a22      	ldr	r2, [pc, #136]	; (80006c0 <_Z8I2C_InitP12I2C_Handle_t+0xc0>)
  8000638:	611a      	str	r2, [r3, #16]
- 800063a:	e008      	b.n	800064e <I2C_Init+0x4e>
+ 800063a:	e008      	b.n	800064e <_Z8I2C_InitP12I2C_Handle_t+0x4e>
     else if (I2Cx_Handle->I2C_Config.sclSpeed == I2C_SCL_SPEED_FMP) // Fast mode+
  800063c:	687b      	ldr	r3, [r7, #4]
  800063e:	685b      	ldr	r3, [r3, #4]
- 8000640:	4a20      	ldr	r2, [pc, #128]	; (80006c4 <I2C_Init+0xc4>)
+ 8000640:	4a20      	ldr	r2, [pc, #128]	; (80006c4 <_Z8I2C_InitP12I2C_Handle_t+0xc4>)
  8000642:	4293      	cmp	r3, r2
- 8000644:	d103      	bne.n	800064e <I2C_Init+0x4e>
+ 8000644:	d103      	bne.n	800064e <_Z8I2C_InitP12I2C_Handle_t+0x4e>
         I2Cx_Handle->I2Cx->TIMINGR = I2C_TIMINGR_FMP;
  8000646:	687b      	ldr	r3, [r7, #4]
  8000648:	681b      	ldr	r3, [r3, #0]
- 800064a:	4a1f      	ldr	r2, [pc, #124]	; (80006c8 <I2C_Init+0xc8>)
+ 800064a:	4a1f      	ldr	r2, [pc, #124]	; (80006c8 <_Z8I2C_InitP12I2C_Handle_t+0xc8>)
  800064c:	611a      	str	r2, [r3, #16]
 
     // Set AUTOEND; generate STOP automatically after NBYTES sent
@@ -947,7 +947,7 @@ void I2C_Init(I2C_Handle_t *I2Cx_Handle)
  80006c4:	0007a120 	.word	0x0007a120
  80006c8:	00010306 	.word	0x00010306
 
-080006cc <I2C1_GPIO_Init>:
+080006cc <_ZL14I2C1_GPIO_Initv>:
  * 
  * @warning Internal pullups used.
  * 
@@ -962,7 +962,7 @@ static void I2C1_GPIO_Init()
     // Port B
     I2C1_Pins.GPIOx = GPIOB;
  80006d2:	1d3b      	adds	r3, r7, #4
- 80006d4:	4a11      	ldr	r2, [pc, #68]	; (800071c <I2C1_GPIO_Init+0x50>)
+ 80006d4:	4a11      	ldr	r2, [pc, #68]	; (800071c <_ZL14I2C1_GPIO_Initv+0x50>)
  80006d6:	601a      	str	r2, [r3, #0]
 
     // Alternate function
@@ -1005,7 +1005,7 @@ static void I2C1_GPIO_Init()
     GPIO_Init(&I2C1_Pins);
  80006fc:	1d3b      	adds	r3, r7, #4
  80006fe:	0018      	movs	r0, r3
- 8000700:	f7ff fd8e 	bl	8000220 <GPIO_Init>
+ 8000700:	f7ff fd8e 	bl	8000220 <_Z9GPIO_InitP13GPIO_Handle_t>
 
 
     // Set SDA
@@ -1016,7 +1016,7 @@ static void I2C1_GPIO_Init()
     GPIO_Init(&I2C1_Pins);
  800070a:	1d3b      	adds	r3, r7, #4
  800070c:	0018      	movs	r0, r3
- 800070e:	f7ff fd87 	bl	8000220 <GPIO_Init>
+ 800070e:	f7ff fd87 	bl	8000220 <_Z9GPIO_InitP13GPIO_Handle_t>
 }
  8000712:	46c0      	nop			; (mov r8, r8)
  8000714:	46bd      	mov	sp, r7
@@ -1025,37 +1025,37 @@ static void I2C1_GPIO_Init()
  800071a:	46c0      	nop			; (mov r8, r8)
  800071c:	48000400 	.word	0x48000400
 
-08000720 <I2C1_Init>:
+08000720 <_ZL9I2C1_Initv>:
 
 static void I2C1_Init()
 {
  8000720:	b580      	push	{r7, lr}
  8000722:	af00      	add	r7, sp, #0
     I2C1_GPIO_Init();
- 8000724:	f7ff ffd2 	bl	80006cc <I2C1_GPIO_Init>
+ 8000724:	f7ff ffd2 	bl	80006cc <_ZL14I2C1_GPIO_Initv>
 
     // Select I2C1
     I2C1_Handle.I2Cx = I2C1;
- 8000728:	4b07      	ldr	r3, [pc, #28]	; (8000748 <I2C1_Init+0x28>)
- 800072a:	4a08      	ldr	r2, [pc, #32]	; (800074c <I2C1_Init+0x2c>)
+ 8000728:	4b07      	ldr	r3, [pc, #28]	; (8000748 <_ZL9I2C1_Initv+0x28>)
+ 800072a:	4a08      	ldr	r2, [pc, #32]	; (800074c <_ZL9I2C1_Initv+0x2c>)
  800072c:	601a      	str	r2, [r3, #0]
     
     // I2C clock speed
     I2C1_Handle.I2C_Config.sclSpeed         = I2C_SCL_SPEED_SM;
- 800072e:	4b06      	ldr	r3, [pc, #24]	; (8000748 <I2C1_Init+0x28>)
- 8000730:	4a07      	ldr	r2, [pc, #28]	; (8000750 <I2C1_Init+0x30>)
+ 800072e:	4b06      	ldr	r3, [pc, #24]	; (8000748 <_ZL9I2C1_Initv+0x28>)
+ 8000730:	4a07      	ldr	r2, [pc, #28]	; (8000750 <_ZL9I2C1_Initv+0x30>)
  8000732:	605a      	str	r2, [r3, #4]
     
     // I2C bus address
     I2C1_Handle.I2C_Config.deviceAddress    = I2C_DEFAULT_ADDRESS;
- 8000734:	4b04      	ldr	r3, [pc, #16]	; (8000748 <I2C1_Init+0x28>)
+ 8000734:	4b04      	ldr	r3, [pc, #16]	; (8000748 <_ZL9I2C1_Initv+0x28>)
  8000736:	2204      	movs	r2, #4
  8000738:	721a      	strb	r2, [r3, #8]
 
     I2C_Init(&I2C1_Handle);
- 800073a:	4b03      	ldr	r3, [pc, #12]	; (8000748 <I2C1_Init+0x28>)
+ 800073a:	4b03      	ldr	r3, [pc, #12]	; (8000748 <_ZL9I2C1_Initv+0x28>)
  800073c:	0018      	movs	r0, r3
- 800073e:	f7ff ff5f 	bl	8000600 <I2C_Init>
+ 800073e:	f7ff ff5f 	bl	8000600 <_Z8I2C_InitP12I2C_Handle_t>
 }
  8000742:	46c0      	nop			; (mov r8, r8)
  8000744:	46bd      	mov	sp, r7
@@ -1074,7 +1074,7 @@ int main(void)
  8000754:	b580      	push	{r7, lr}
  8000756:	af00      	add	r7, sp, #0
     I2C1_Init();
- 8000758:	f7ff ffe2 	bl	8000720 <I2C1_Init>
+ 8000758:	f7ff ffe2 	bl	8000720 <_ZL9I2C1_Initv>
 
 
 

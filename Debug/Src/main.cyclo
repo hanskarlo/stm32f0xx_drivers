@@ -1,3 +1,5 @@
-main.c:41:13:I2C1_GPIO_Init	1
-main.c:75:13:I2C1_Init	1
-main.c:94:5:main	1
+scd41.h:28:1:SCD41::SCD41()	1
+scd41.h:32:1:SCD41::~SCD41()	1
+main.cpp:43:13:void I2C1_GPIO_Init()	1
+main.cpp:77:13:void I2C1_Init()	1
+main.cpp:96:5:int main()	1

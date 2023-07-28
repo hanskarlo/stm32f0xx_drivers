@@ -1,13 +1,13 @@
-stm32f0xx_spi.c:13:6:SPI_PeriClockControl	6
-stm32f0xx_spi.c:34:6:SPI_Init	4
-stm32f0xx_spi.c:88:6:SPI_Enable	3
-stm32f0xx_spi.c:107:6:SPI_DeInit	1
-stm32f0xx_spi.c:120:9:SPI_GetFlagStatus	1
-stm32f0xx_spi.c:133:6:SPI_sendData	5
-stm32f0xx_spi.c:186:6:SPI_readData	7
-stm32f0xx_spi.c:244:6:SPI_sendDataIT	2
-stm32f0xx_spi.c:273:6:SPI_readDataIT	1
-stm32f0xx_spi.c:295:6:SPI_IRQInterruptConfig	1
-stm32f0xx_spi.c:306:6:SPI_IRQPriorityConfig	1
-stm32f0xx_spi.c:317:6:SPI_IRQHandler	13
-stm32f0xx_spi.c:371:13:SPI_ApplicationEventCallback	5
+stm32f0xx_spi.cpp:13:6:void SPI_PeriClockControl(SPI_Reg_t*, State)	6
+stm32f0xx_spi.cpp:34:6:void SPI_Init(SPI_Handle_t*)	4
+stm32f0xx_spi.cpp:88:6:void SPI_Enable(SPI_Reg_t*, uint8_t)	3
+stm32f0xx_spi.cpp:107:6:void SPI_DeInit(SPI_Reg_t*)	1
+stm32f0xx_spi.cpp:120:9:uint8_t SPI_GetFlagStatus(SPI_Reg_t*, uint32_t)	1
+stm32f0xx_spi.cpp:133:6:void SPI_sendData(SPI_Reg_t*, uint8_t*, uint32_t)	5
+stm32f0xx_spi.cpp:186:6:void SPI_readData(SPI_Reg_t*, uint8_t*, uint32_t)	7
+stm32f0xx_spi.cpp:244:6:void SPI_sendDataIT(SPI_Handle_t*, uint8_t*, uint32_t)	2
+stm32f0xx_spi.cpp:273:6:void SPI_readDataIT(SPI_Handle_t*, uint8_t*, uint32_t)	1
+stm32f0xx_spi.cpp:295:6:void SPI_IRQInterruptConfig(uint8_t, State)	1
+stm32f0xx_spi.cpp:306:6:void SPI_IRQPriorityConfig(uint8_t, uint32_t)	1
+stm32f0xx_spi.cpp:317:6:void SPI_IRQHandler(SPI_Handle_t*)	16
+stm32f0xx_spi.cpp:371:13:void SPI_ApplicationEventCallback(SPI_Handle_t*, uint8_t)	5

@@ -1,4 +1,4 @@
-stm32f0xx_usart.c:24:6:USART_PeriClockControl	19
-stm32f0xx_usart.c:74:6:USART_Init	3
-stm32f0xx_usart.c:115:6:USART_DeInit	1
-stm32f0xx_usart.c:140:6:USART_PeripheralControl	2
+stm32f0xx_usart.cpp:24:6:void USART_PeriClockControl(USART_Reg_t*, State)	19
+stm32f0xx_usart.cpp:74:6:void USART_Init(USART_Handle_t*)	3
+stm32f0xx_usart.cpp:115:6:void USART_DeInit(USART_Handle_t*)	1
+stm32f0xx_usart.cpp:140:6:void USART_PeripheralControl(USART_Reg_t*, State)	2
