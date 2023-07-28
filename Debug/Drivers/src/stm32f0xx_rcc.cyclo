@@ -1,0 +1,2 @@
+stm32f0xx_rcc.c:26:10:RCC_GetPCLKValue	6
+stm32f0xx_rcc.c:67:11:RCC_GetPLLOutputClock	1

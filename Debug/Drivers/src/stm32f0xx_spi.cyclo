@@ -1,4 +1,13 @@
 stm32f0xx_spi.c:13:6:SPI_PeriClockControl	6
 stm32f0xx_spi.c:34:6:SPI_Init	4
-stm32f0xx_spi.c:84:6:SPI_DeInit	1
-stm32f0xx_spi.c:94:6:SPI_SendData	1
+stm32f0xx_spi.c:88:6:SPI_Enable	3
+stm32f0xx_spi.c:107:6:SPI_DeInit	1
+stm32f0xx_spi.c:120:9:SPI_GetFlagStatus	1
+stm32f0xx_spi.c:133:6:SPI_sendData	5
+stm32f0xx_spi.c:186:6:SPI_readData	7
+stm32f0xx_spi.c:244:6:SPI_sendDataIT	2
+stm32f0xx_spi.c:273:6:SPI_readDataIT	1
+stm32f0xx_spi.c:295:6:SPI_IRQInterruptConfig	1
+stm32f0xx_spi.c:306:6:SPI_IRQPriorityConfig	1
+stm32f0xx_spi.c:317:6:SPI_IRQHandler	13
+stm32f0xx_spi.c:371:13:SPI_ApplicationEventCallback	5

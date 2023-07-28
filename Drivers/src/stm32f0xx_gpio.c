@@ -65,12 +65,12 @@ void GPIO_PeriphClkCtrl(GPIO_Reg_t* GPIOx, State clkState)
  *
  * @param GPIO_Handle_t* - GPIO handle for peripheral base address and config
  */
-void GPIO_Init(GPIOx_Handle_t *GPIOHandle)
+void GPIO_Init(GPIO_Handle_t *GPIOHandle)
 {
 	// Mode
 	uint8_t pinMode = GPIOHandle->GPIO_Config.GPIO_PinMode;
 	uint8_t pinNo 	= GPIOHandle->GPIO_Config.GPIO_PinNo;
-	uint8_t pinSpd 	= GPIOHandle->GPIO_Config.GPIO_PinSpd;
+	uint8_t pinSpd 	= GPIOHandle->GPIO_Config.GPIO_PinSpeed;
 	uint8_t pinPUPD = GPIOHandle->GPIO_Config.GPIO_PinPuPd;
 	uint8_t pinOut 	= GPIOHandle->GPIO_Config.GPIO_PinOPType;
 	uint8_t pinAltFx 	= GPIOHandle->GPIO_Config.GPIO_PinAltFunc;
@@ -135,7 +135,7 @@ void GPIO_Init(GPIOx_Handle_t *GPIOHandle)
 	// Alternate fxn
 	if (pinMode == ALT)
 	{
-		uint8_t index = pinNo/8;
+		uint8_t index = pinNo / 8;
 		uint8_t bitPos = (pinNo % 8) * 4;
 
 		GPIOHandle->GPIOx->AFR[index] &= ~(0xF << bitPos);

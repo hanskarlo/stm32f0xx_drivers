@@ -31,7 +31,7 @@ typedef struct
 {
 	uint8_t GPIO_PinNo;
 	uint8_t GPIO_PinMode;
-	uint8_t GPIO_PinSpd;
+	uint8_t GPIO_PinSpeed;
 	uint8_t GPIO_PinPuPd;
 	uint8_t GPIO_PinOPType;
 	uint8_t GPIO_PinAltFunc;
@@ -47,7 +47,7 @@ typedef struct
 {
 	GPIO_Reg_t *GPIOx; /*!< Base address of GPIOx peripheral >*/
 	GPIO_PinConfig_t GPIO_Config;
-}GPIOx_Handle_t;
+}GPIO_Handle_t;
 
 
 
@@ -97,6 +97,7 @@ typedef struct
  */
 #define LOW		0
 #define MEDIUM	1
+#define FAST    2
 #define HIGH	3
 
 /*
@@ -116,7 +117,7 @@ typedef struct
 /*
  * Initialize GPIOx
  */
-void GPIO_Init(GPIOx_Handle_t *GPIOHandle);
+void GPIO_Init(GPIO_Handle_t *GPIOHandle);
 
 /*
  * Deinit GPIOx

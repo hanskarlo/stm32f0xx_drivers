@@ -1,0 +1,4 @@
+stm32f0xx_usart.c:24:6:USART_PeriClockControl	19
+stm32f0xx_usart.c:74:6:USART_Init	3
+stm32f0xx_usart.c:115:6:USART_DeInit	1
+stm32f0xx_usart.c:140:6:USART_PeripheralControl	2
