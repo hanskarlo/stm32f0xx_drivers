@@ -68,3 +68,5 @@ ctrlp.root
 
 #vscode settings
 .vscode/
+
+build/
