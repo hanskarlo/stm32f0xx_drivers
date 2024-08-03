@@ -1,8 +1,12 @@
-/*
- * stm32f0xx_gpio.h
- *
- *  Created on: Nov. 28, 2022
- *      Author: hanzahar
+/**
+ * @file stm32f0xx_gpio.h
+ * 
+ * @author www.github.com/hanskarlo
+ * 
+ * @brief GPIO periphal Hardware Abstaction Layer (HAL) library
+ * header for STM32F0xx devices. Provides support for initialization,
+ * I/O, and interrupt configuration.
+ * 
  */
 
 #ifndef INC_STM32F0XX_GPIO_H_
@@ -109,7 +113,6 @@ typedef struct
 
 
 
-
 /***********************************
  * APIs
  **********************************/
@@ -157,7 +160,7 @@ void GPIO_TogglePin(GPIO_Reg_t* GPIOx, uint8_t PinNo);
 /*
  * IRQ config and ISR handling
  */
-void GPIO_IRQConfig(uint8_t IRQ_No, uint8_t IRQ_Prio, State toggle);
+bool GPIO_IRQConfig(uint8_t IRQ_No, uint8_t IRQ_Prio, State toggle);
 
 /*
  *

@@ -1,14 +1,23 @@
+/**
+ * @file stm32f0xx_gpio.cpp
+ * 
+ * @author www.github.com/hanskarlo
+ * 
+ * @brief GPIO periphal Hardware Abstaction Layer (HAL) library
+ * source file for STM32F0xx devices. Provides support for initialization,
+ * I/O, and interrupt configuration.
+ * 
+ */
+
 #include "stm32f0xx_gpio.h"
 
 
-/************
- *
- * @brief Enables/Disables GPIOx clock
- *
- * @param GPIO_Reg_t - helper struct for GPIOx
- * @param State - ENABLE(0) or DISABLE(1)
- *
- ***********/
+/**
+ * @brief Configures GPIO peripheral clock
+ * 
+ * @param GPIOx GPIOx register type (stm32f0xx_gpio.h)
+ * @param clkState ENABLE or DISABLE
+ */
 void GPIO_PeriphClkCtrl(GPIO_Reg_t* GPIOx, State clkState)
 {
 	if (clkState == ENABLE)
@@ -58,12 +67,10 @@ void GPIO_PeriphClkCtrl(GPIO_Reg_t* GPIOx, State clkState)
 }
 
 
-
-
-/*
- * @brief
- *
- * @param GPIO_Handle_t* - GPIO handle for peripheral base address and config
+/**
+ * @brief Initialize GPIOx given settings configured in GPIO handle.
+ * 
+ * @param GPIOHandle GPIOx handle type (stm32f0xx_gpio.h) 
  */
 void GPIO_Init(GPIO_Handle_t *GPIOHandle)
 {
@@ -109,7 +116,7 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
 		}
 
 		// Set source input for EXTIx external interrupt
-		uint8_t regNum = pinNo / 15;
+		uint8_t regNum = (pinNo / 4);
 		uint8_t portMaskPos = (4 * (pinNo % 4));
 		uint8_t portCode = GPIO_PORT_CODE(GPIOHandle->GPIOx);
 		SYSCFG->EXTICR[regNum] |= portCode << portMaskPos;
@@ -146,12 +153,10 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
 }
 
 
-
-
 /**
- * @brief
- *
- *
+ * @brief Deinitializes GPIOx, resets I/O port in RCC_AHBRSTR.
+ * 
+ * @param GPIOx GPIOx register type (stm32f0xx_gpio.h)
  */
 void GPIO_DeInit(GPIO_Reg_t *GPIOx)
 {
@@ -183,9 +188,7 @@ void GPIO_DeInit(GPIO_Reg_t *GPIOx)
  * @brief Read digital pin
  *
  * @param GPIO_Reg_t -- GPIO port register map struct
- *
  * @param uint8_t pinNo -- Pin number (0-15)
- *
  */
 uint8_t GPIO_ReadPin(GPIO_Reg_t *GPIOx, uint8_t pinNo)
 {
@@ -200,14 +203,11 @@ uint8_t GPIO_ReadPin(GPIO_Reg_t *GPIOx, uint8_t pinNo)
 
 
 /**
- * @brief Write to digital pin
+ * @brief Write digital pin to state
  *
- * @param GPIO_Reg_t -- GPIO port register map struct
- *
- * @param uint8_t pinNo -- Pin number (0-15)
- *
- * @param uint8_t value -- pin logic level
- *
+ * @param GPIO_Reg_t GPIOx register map struct (stm32f0xx_gpio.h)
+ * @param pinNo Pin number (0-15)
+ * @param value Pin binary logic level (0,1)
  */
 void GPIO_WritePin(GPIO_Reg_t* GPIOx, uint8_t PinNo, GPIOPinState pinState)
 {
@@ -218,11 +218,11 @@ void GPIO_WritePin(GPIO_Reg_t* GPIOx, uint8_t PinNo, GPIOPinState pinState)
 }
 
 
-
-
-
 /**
- * @brief Write to GPIO port
+ * @brief Write entire Portx state (x = A to F).
+ * 
+ * @param GPIOx GPIOx register map struct (stm32f0xx_gpio.h)
+ * @param regValue Port logic level (0x0000, 0xFFFF)
  */
 void GPIO_WritePort(GPIO_Reg_t* GPIOx, uint16_t regValue)
 {
@@ -230,31 +230,34 @@ void GPIO_WritePort(GPIO_Reg_t* GPIOx, uint16_t regValue)
 }
 
 
-
-
-
 /**
  * @brief Toggle pin
+ * 
+ * @param GPIOx GPIOx register map struct (stm32f0xx_gpio.h)
+ * @param PinNo Pin number
  */
-void GPIO_TogglePin(GPIO_Reg_t* GPIOx, uint8_t PinNo)
+void GPIO_TogglePin(GPIO_Reg_t* GPIOx, uint8_t pinNo)
 {
-	GPIOx->ODR ^= (1 << PinNo);
+	GPIOx->ODR ^= (1 << pinNo);
 }
 
 
-
-
-
-/*
+/**
  * @brief Set IRQ Config
  *
- * @param IRQ_No -- IRQ number (0-31)
- * @param IRQ_Prio -- IRQ priority (0-3, representing priority value 0-192 in steps of 64)
+ * @param irqNo -- IRQ number (1 - EXTI[0:1], 2 - EXTI[2:3], 3 - EXTI[4:15])
+ * @param irq_priority -- IRQ priority (0-3, representing priority value 0-192 in steps of 64)
+ * @param toggle -- ENABLE or DISABLE interrupt
  */
-void GPIO_IRQConfig(uint8_t irqNo, uint8_t irqPrio, State toggle)
+bool GPIO_IRQConfig(uint8_t irqNo, uint8_t irq_priority, State toggle)
 {
+    // Check IRQ number cooresponds to assigned vector
+    if ((irqNo != IRQ_POS_EXTI0_1) || (irqNo != IRQ_POS_EXTI2_3) || (irqNo != IRQ_POS_EXTI2_3))
+        return false;
+
+
 	if (toggle == ENABLE)
-		*NVIC_ISER |= (1 << irqNo);
+		*NVIC_ISER |=  (1 << irqNo);
 	else
 		*NVIC_ICER &= ~(1 << irqNo);
 
@@ -263,16 +266,19 @@ void GPIO_IRQConfig(uint8_t irqNo, uint8_t irqPrio, State toggle)
 	uint8_t IPR_No = irqNo / 4;
 	uint8_t byteOffset = irqNo % 4;
 
-	*((uint8_t *)NVIC_IPR0 + (IPR_No * 4)) |= ( irqPrio << ((8 * byteOffset) + 6) );
+	*((uint8_t *)NVIC_IPR0 + (IPR_No * 4)) |= ( irq_priority << ((8 * byteOffset) + 6) );
+
+    return true;
 }
 
-/*
- * @brief
+
+/**
+ * @brief 
+ * 
  */
-void GPIO_IRQHandler(uint8_t PinNo)
+void GPIO_IRQHandler()
 {
-
-
+    // TODO: IRQ Handler
 }
 
 
