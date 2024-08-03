@@ -104,6 +104,7 @@
 #define USART8_PERIPH_ADDR					0x40011C00U
 
 #define EXTI_BASE_ADDR						0x40010400U
+#define CRC_BASE_ADDR                       0x40023000U
 #define SYSCFG_BASE_ADDR					0x40010000U
 
 typedef enum
@@ -169,6 +170,20 @@ typedef struct{
 	volatile uint32_t EXTI_SWIER;	// S/W INT event register
 	volatile uint32_t PR;			// Pending register
 }EXTI_Reg_t;
+
+
+
+/*
+ * CRC Register struct
+*/
+typedef struct{
+    volatile uint32_t CRC_DR;
+    volatile uint32_t CRC_IDR;
+    volatile uint32_t CRC_CR;
+    volatile uint32_t CRC_INIT;
+    volatile uint32_t CRC_POL;
+}CRC_Reg_t;
+
 
 
 /*
@@ -282,6 +297,11 @@ typedef struct{
  */
 #define EXTI			((EXTI_Reg_t *)EXTI_BASE_ADDR)
 
+/*
+ * CRC peripheral register typecasted to CRC_Reg_t struct
+*/
+#define CRC             ((CRC_Reg_t *)CRC_BASE_ADDR)
+
 
 /*
  * System Configuration register
@@ -339,6 +359,13 @@ typedef struct{
 #define GPIOF_CLK_DISABLE()		RCC->AHBENR &= ~(1 << 22)
 
 
+
+/**
+ * Clock enable macros for CRC peripheral
+ */
+
+#define CRC_CLK_EN()			(RCC->AHBENR |= (1 << 6))
+#define CRC_CLK_DISABLE()	    (RCC->AHBENR &= ~(1 << 6))
 
 
 /**
