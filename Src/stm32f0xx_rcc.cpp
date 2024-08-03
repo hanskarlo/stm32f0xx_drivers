@@ -1,11 +1,10 @@
 /**
  * @file stm32f0xx_rcc.c
  * 
- * @author your name (you@domain.com)
+ * @author github.com/hanskarlo
  * 
  * @brief 
  * 
- * @date 2023-06-01
  */
 
 
@@ -15,6 +14,15 @@
 uint16_t AHB_PreScaler[8] = {2, 4, 8, 16, 64, 128, 256, 512};
 uint8_t APB_PreScaler[4] = {2, 4 , 8, 16};
 
+static uint32_t _HSE_FREQ_HZ = HSI_FREQ_HZ;
+
+
+
+void RCC_Set_HSE(uint32_t HSE_FREQ_HZ)
+{
+    _HSE_FREQ_HZ = HSE_FREQ_HZ;
+}
+
 
 /**
  * @brief Returns the PCLK
@@ -23,20 +31,22 @@ uint8_t APB_PreScaler[4] = {2, 4 , 8, 16};
  * 
  * @return uint32_t - PCLK
  */
-uint32_t RCC_GetPCLKValue(void)
+uint32_t RCC_Get_PCLK(void)
 {
-    uint32_t sysClk = 0;
-    uint8_t SWS = (RCC->CFGR >> 2) & 0x03;
+    uint32_t SYSCLK = 0;
+    uint8_t SWS = (RCC->CFGR >> RCC_CFGR_SWS) & 0x03U;
 
     // Clock source
-    if (SWS == 0 || SWS == 1) //! HSI and HSE both 8MHz on STM32F072RB-Disco
-        sysClk = 8000000;
-    else if (SWS == 2)
-        sysClk = RCC_GetPLLOutputClock();
+    if (SWS == RCC_HSI_USED || SWS == RCC_HSE_USED) //! HSI and HSE both 8MHz on STM32F072RB-Disco
+        SYSCLK = HSI_FREQ_HZ;
+    else if (SWS == RCC_HSE_USED)
+        SYSCLK = RCC_Get_PLLCLK();
+    else if (SWS == RCC_HSI48_USED)
+        SYSCLK = 48000000;
 
 
     // AHB Prescaler
-    uint8_t HPRE = (RCC->CFGR >> 4) & 0x0F;
+    uint8_t HPRE = (RCC->CFGR >> RCC_CFGR_HPRE) & 0x0FU;
     uint8_t ahbPrescaler;
     if (HPRE < 8)
         ahbPrescaler = 1;
@@ -45,26 +55,61 @@ uint32_t RCC_GetPCLKValue(void)
     
 
     // APB Prescaler 
-    uint8_t PPRE = (RCC->CFGR >> 8) & 0x07;
+    uint8_t PPRE = (RCC->CFGR >> RCC_CFGR_PPRE) & 0x07U;
     uint8_t apbPrescaler;
     if (PPRE < 4)
         apbPrescaler = 1;
     else
         apbPrescaler = APB_PreScaler[PPRE - 8];
 
+
     // Calculate PCLK
-    uint32_t PCLK = (sysClk / ahbPrescaler) / apbPrescaler;
+    uint32_t PCLK = (SYSCLK / ahbPrescaler) / apbPrescaler;
 
     return PCLK;
 }
 
 
 /**
- * @brief 
+ * @brief Returns Phased-Lock Loop clock (PLLCLK) rate in Hz.
  * 
  * @return uint32_t 
  */
-uint32_t  RCC_GetPLLOutputClock(void)
+uint32_t  RCC_Get_PLLCLK(void)
 {
-    return 0;
+    // Determine PLL input clock source
+    uint8_t PLLSRC = (RCC->CFGR >> RCC_CFGR_PLL_SRC) & 0xFFU;
+    uint32_t PLLCLK;    
+
+    switch (PLLSRC)
+    {
+        case PLL_SRC_HSI_DIV_2:
+        {
+            PLLCLK = (HSI_FREQ_HZ / 2);
+            break;
+        }
+
+        case PLL_SRC_HSI:
+        {
+            PLLCLK = HSI_FREQ_HZ;
+            break;
+        }
+
+        case PLL_SRC_HSE:
+        {
+            PLLCLK = _HSE_FREQ_HZ;
+            break;
+        }
+
+        case PLL_SRC_HSI48:
+        {
+            PLLCLK = HSI48_FREQ_HZ;
+            break;
+        }
+
+        default:
+            PLLCLK = 0;
+    }
+
+    return PLLCLK;
 }
