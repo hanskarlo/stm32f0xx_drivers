@@ -9,6 +9,7 @@ STM32F0xx peripheral **Hardware Abstraction Layer** (HAL) library used and initi
 - I2C
 - USART
 - SPI
+- CRC
 
 ## ToDo
 - CAN
@@ -16,3 +17,4 @@ STM32F0xx peripheral **Hardware Abstraction Layer** (HAL) library used and initi
 
 ## Notes
 - Assumes external 8MHz oscillator used (HSE source).
+- Events not supported.
