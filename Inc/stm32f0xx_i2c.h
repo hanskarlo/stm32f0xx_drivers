@@ -1,14 +1,12 @@
 /**
- * 
  * @file stm32f0xx_i2c.h
  * 
- * @author github.com/hanskarlo
+ * @author www.github.com/hanskarlo
  * 
- * @brief 
+ * @brief I2C periphal Hardware Abstaction Layer (HAL) library
+ * header for STM32F0xx devices.
  * 
- * @date 2023-05-29
  */
-
 
 #ifndef INC_STM32F0XX_I2C_H_
 #define INC_STM32F0XX_I2C_H_
@@ -33,6 +31,15 @@ typedef struct
     uint32_t        rxlen;
 }I2C_Handle_t;
 
+typedef enum
+{
+    I2C_STATE_READY,
+    I2C_STATE_BUSY_IN_TX,
+    I2C_STATE_BUsY_IN_RX,
+
+} I2C_State_t;
+
+
 #define I2C_DEFAULT_ADDRESS 0x04
 
 #define I2C_READY       0
@@ -43,8 +50,12 @@ typedef struct
 #define I2C_SCL_SPEED_FM    400000
 #define I2C_SCL_SPEED_FMP   500000
 
+
 //* I2C_TIMINGR Register configs
-// From examples on page 665
+/*
+ * From example configurations in RM91 pg 665 for fclk @ 8MHz
+ */
+
 #define I2C_TIMINGR_SM      0x10420F13
 #define I2C_TIMINGR_FM      0x00310309
 #define I2C_TIMINGR_FMP     0x00010306
@@ -83,7 +94,7 @@ typedef struct
 #define I2C_ISR_ADDR    3
 #define I2C_ISR_NACKF   4
 #define I2C_ISR_STOPF   5   
-#define I2C_ISR_TC5     6
+#define I2C_ISR_TC      6
 #define I2C_ISR_TCR     7
 #define I2C_ISR_BERR    8
 #define I2C_ISR_ARLO    9
@@ -113,6 +124,12 @@ typedef struct
 #define I2C_ENABLE_SR   	SET
 
 
+//* I2C Interrupt Vector Number
+#define I2C1_IRQ_NUM    23
+#define I2C2_IRQ_NUM    24
+
+
+
 //* I2C application events macros
 #define I2C_EV_TX_CMPLT  	 	0
 #define I2C_EV_RX_CMPLT  	 	1
@@ -134,17 +151,18 @@ void I2C_PeriClockControl(I2C_Reg_t *I2Cx, State enable);
 /*
  * Init and De-init
  */
-void I2C_Init(I2C_Handle_t *I2Cx_Handle);
+void I2C_Init(I2C_Handle_t *I2Cx_Handle, bool master);
 void I2C_DeInit(I2C_Reg_t *I2Cx);
 
 
 /*
  * Data Send and Receive
  */
-void I2C_MasterSendData(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint8_t dataLen, uint8_t slaveAddr, uint8_t Sr);
-void I2C_MasterReceiveData(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t dataLen, uint8_t slaveAddr, uint8_t Sr);
-uint8_t I2C_MasterSendDataIT(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint32_t len, uint8_t slaveAddr, uint8_t Sr);
-uint8_t I2C_MasterReceiveDataIT(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t Sr);
+
+bool I2C_SendData(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint8_t dataLen, uint8_t slaveAddr);
+void I2C_ReceiveData(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t dataLen, uint8_t slaveAddr, uint8_t Sr);
+uint8_t I2C_SendDataIT(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint32_t len, uint8_t slaveAddr);
+uint8_t I2C_ReceiveDataIT(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t Sr);
 
 void I2C_CloseReceiveData(I2C_Handle_t *I2Cx_Handle);
 void I2C_CloseSendData(I2C_Handle_t *I2Cx_Handle);
@@ -156,8 +174,8 @@ uint8_t I2C_SlaveReceiveData(I2C_Reg_t *I2Cx);
 /*
  * IRQ Configuration and ISR handling
  */
-void I2C_IRQInterruptConfig(uint8_t irqNum, State enable);
-void I2C_IRQPriorityConfig(uint8_t irqNum, uint32_t irqPriority);
+
+void I2C_IRQInterruptConfig(I2C_Handle_t I2Cx_Handle, State enable, uint8_t irq_priority);
 void I2C_EV_IRQHandling(I2C_Handle_t *I2Cx_Handle);
 void I2C_ER_IRQHandling(I2C_Handle_t *I2Cx_Handle);
 
@@ -165,6 +183,7 @@ void I2C_ER_IRQHandling(I2C_Handle_t *I2Cx_Handle);
 /*
  * Other Peripheral Control APIs
  */
+
 void I2C_PeripheralControl(I2C_Reg_t *I2Cx, State enable);
 uint8_t I2C_GetFlagStatus(I2C_Reg_t *I2Cx , uint32_t flagName);
 void I2C_ManageAcking(I2C_Reg_t *I2Cx, State enable);
@@ -175,6 +194,7 @@ void I2C_SlaveEnableDisableCallbackEvents(I2C_Reg_t *I2Cx,State enable);
 /*
  * Application callback
  */
+
 void I2C_ApplicationEventCallback(I2C_Handle_t *I2Cx_Handle, uint8_t appEvent);
 
 

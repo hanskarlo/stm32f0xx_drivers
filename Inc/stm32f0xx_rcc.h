@@ -1,9 +1,11 @@
 /**
  * @file stm32f0xx_rcc.h
  * 
- * @author github.com/hanskarlo
+ * @author www.github.com/hanskarlo
  * 
- * @brief 
+ * @brief RCC periphal Hardware Abstaction Layer (HAL) library
+ * header for STM32F0xx devices.
+ * 
  */
 
 #ifndef INC_STM32F0XX_RCC_H_
@@ -17,7 +19,6 @@
 
 
 //* Register bit positions
-//  ^^^^^^^^^^^^^^^^^^^^^^
 
 /*
  * Clock configuration register (RCC_CFGR)

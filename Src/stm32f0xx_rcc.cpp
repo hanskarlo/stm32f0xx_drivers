@@ -1,9 +1,10 @@
 /**
  * @file stm32f0xx_rcc.c
  * 
- * @author github.com/hanskarlo
+ * @author www.github.com/hanskarlo
  * 
- * @brief 
+ * @brief RCC periphal Hardware Abstaction Layer (HAL) library
+ * functions for STM32F0xx devices.
  * 
  */
 
