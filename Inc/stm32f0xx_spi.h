@@ -23,6 +23,7 @@ typedef struct
 	uint8_t CPOL;
 	uint8_t CPHA;
 	uint8_t SSM;
+    uint8_t SSOE;
 }SPI_Config_t;
 
 
@@ -31,14 +32,14 @@ typedef struct
  */
 typedef struct
 {
-	SPI_Reg_t 		*SPIx;   /*!< This holds the base address of SPIx(x:0,1,2) peripheral >*/
-	SPI_Config_t 	SPIConfig;
-	uint8_t 		*txBuffer; /* !< To store the app. Tx buffer address > */
-	uint8_t 		*rxBuffer;	/* !< To store the app. Rx buffer address > */
-	uint32_t 		txLen;		/* !< To store Tx len > */
-	uint32_t 		rxLen;		/* !< To store Tx len > */
-	uint8_t 		txState;	/* !< To store Tx state > */
-	uint8_t 		rxState;	/* !< To store Rx state > */
+	SPI_Reg_t 		*SPIx;      // This holds the base address of SPIx(x = 1,2) peripheral
+	SPI_Config_t 	SPIConfig;  // SPI config
+	uint8_t 		*txBuffer;  // To store the app. Tx buffer address
+	uint8_t 		*rxBuffer;	// To store the app. Rx buffer address
+	uint32_t 		txLen;		// To store Tx len
+	uint32_t 		rxLen;		// To store Rx len
+	uint8_t 		txState;	// To store Tx state
+	uint8_t 		rxState;	// To store Rx state
 }SPI_Handle_t;
 
 
@@ -52,10 +53,17 @@ typedef struct
 /*
  * Possible SPI Application events
  */
-#define SPI_EVENT_TX_CMPLT   1
-#define SPI_EVENT_RX_CMPLT   2
-#define SPI_EVENT_OVR_ERR    3
-#define SPI_EVENT_CRC_ERR    4
+typedef enum
+{
+    SPI_EVENT_TX_CMPLT,   
+    SPI_EVENT_RX_CMPLT,   
+    SPI_EVENT_OVR_ERR,    
+    SPI_EVENT_MODF_ERR,
+    SPI_EVENT_CRC_ERR,    
+    SPI_EVENT_FRE_ERR
+}SPI_AppEvent_t;
+
+
 
 
 
@@ -112,24 +120,43 @@ typedef struct
 /*
  * @SPI_CR1
 */
-#define SPI_CR1_SPE 6
+#define SPI_CR1_BIDMODE     15
+#define SPI_CR1_BIDIOE      14
+#define SPI_CR1_CRCEN       13
+#define SPI_CR1_CRCNEXT     12
+#define SPI_CR1_CRCL        11
+#define SPI_CR1_RXONLY      10
+#define SPI_CR1_SSM         9
+#define SPI_CR1_SSI         8
+#define SPI_CR1_LSBFIRST    7
+#define SPI_CR1_SPE         6
+#define SPI_CR1_BR          3
+#define SPI_CR1_MSTR        2
+#define SPI_CR1_CPOL        1
+#define SPI_CR1_CPHA        0
 
 /*
  * @SPI_CR2
 */
-#define TXEIE   7
-#define RXEIE   6
+#define SPI_CR2_FXRTH   12
+#define SPI_CR2_DS      8 
+#define SPI_CR2_TXEIE   7
+#define SPI_CR2_RXEIE   6
+#define SPI_CR2_ERREIE  5
+#define SPI_CR2_SSOE    2
+#define SPI_CR2_TXDMAEN 1
+#define SPI_CR2_RXDMAEN 0
 
 /*
  * @SPI_SR 
 */
-#define FRE         8
-#define BSY         7
-#define OVR         6
-#define MODF        5
-#define CRCERR      4
-#define TXE         1
-#define RXNE        0
+#define SPI_SR_FRE         8
+#define SPI_SR_BSY         7
+#define SPI_SR_OVR         6
+#define SPI_SR_MODF        5
+#define SPI_SR_CRCERR      4
+#define SPI_SR_TXE         1
+#define SPI_SR_RXNE        0
 
 #define NOT_EMPTY   0
 #define EMPTY       1
@@ -137,14 +164,18 @@ typedef struct
 /*
  * SPI related status flags definitions
  */
-#define SPI_TXE_FLAG(SPIx)  ( (SPIx->SR) & (1 << TXE)  )
-#define SPI_RXNE_FLAG(SPIx) ( (SPIx->SR) & (1 << RXNE) )          
-#define SPI_BUSY_FLAG(SPIx) ( (SPIx->SR) & (1 << BSY)  ) 
-#define SPI_ERR(SPIx)       ( (SPIx->SR) & (1 << CRCERR) ) ? 1 : \
-                            ( (SPIx->SR) & (1 << MODF)   ) ? 1 : \
-                            ( (SPIx->SR) & (1 << OVR)    ) ? 1 : \
-                            ( (SPIx->SR) & (1 << FRE)    ) ? 1 : 0
+#define SPI_TXE_FLAG(SPIx)  ( (SPIx->SR) & (1 << SPI_SR_TXE)  )
+#define SPI_RXNE_FLAG(SPIx) ( (SPIx->SR) & (1 << SPI_SR_RXNE) )          
+#define SPI_BUSY_FLAG(SPIx) ( (SPIx->SR) & (1 << SPI_SR_BSY)  ) 
+#define SPI_ERR(SPIx)       ( (SPIx->SR) & (1 << SPI_SR_CRCERR) ) ? 1 : \
+                            ( (SPIx->SR) & (1 << SPI_SR_MODF)   ) ? 1 : \
+                            ( (SPIx->SR) & (1 << SPI_SR_OVR)    ) ? 1 : \
+                            ( (SPIx->SR) & (1 << SPI_SR_FRE)    ) ? 1 : 0
 
+
+//* SPI Interrupt Vector Number
+#define SPI1_IRQ_NUM    25
+#define SPI2_IRQ_NUM    26
 
 
 
@@ -155,45 +186,34 @@ typedef struct
 /*
  * Peripheral Clock setup
  */
-void SPI_PeriClockControl(SPI_Reg_t *SPIx, State sclkState);
+void SPI_PCLK_Control(SPI_Reg_t *SPIx, State sclkState);
 
 /*
  * Init and De-init
  */
-void SPI_Init(SPI_Handle_t *SPIxHandle);
+
+const bool SPI_Init(SPI_Handle_t *SPIx_Handle);
 void SPI_DeInit(SPI_Reg_t *SPIx);
 
 
 /*
  * Data Send and Receive
  */
-void SPI_sendData(SPI_Reg_t *SPIx,uint8_t *txBuffer, uint32_t dataLen);
+void SPI_sendData(SPI_Reg_t *SPIx, uint8_t *txBuffer, uint32_t dataLen);
 void SPI_readData(SPI_Reg_t *SPIx, uint8_t *rxBuffer, uint32_t dataLen);
 
-void SPI_sendDataIT(SPI_Handle_t *SPIxHandle, uint8_t *txBuffer_, uint32_t txLen_);
-void SPI_readDataIT(SPI_Handle_t *SPIxHandle, uint8_t *rxBuffer_, uint32_t rxLen_);
+void SPI_sendDataIT(SPI_Handle_t *SPIx_Handle, uint8_t *txBuffer, uint32_t txLen);
+void SPI_readDataIT(SPI_Handle_t *SPIx_Handle, uint8_t *rxBuffer, uint32_t rxLen);
 
 /*
  * IRQ Configuration and ISR handling
  */
-void SPI_IRQInterruptConfig(uint8_t irqNo, State state);
-void SPI_IRQPriorityConfig(uint8_t irqNo, uint32_t irqPrio);
-void SPI_IRQHandler(SPI_Handle_t *SPIxHandle);
-
-/*
- * Other Peripheral Control APIs
- */
-void SPI_Enable(SPI_Reg_t *SPIx, uint8_t enable);
-void SPI_SSIConfig(SPI_Reg_t *SPIx, uint8_t EnOrDi);
-void SPI_SSOEConfig(SPI_Reg_t *SPIx, uint8_t EnOrDi);
-uint8_t SPI_GetFlagStatus(SPI_Reg_t *SPIx , uint32_t FlagName);
-void SPI_ClearOVRFlag(SPI_Reg_t *SPIx);
-void SPI_CloseTransmisson(SPI_Handle_t *pSPIHandle);
-void SPI_CloseReception(SPI_Handle_t *pSPIHandle);
+void SPI_IRQInterruptConfig(SPI_Handle_t *SPIx_Handle, State state, uint8_t priority);
+void SPI_IRQHandler(SPI_Handle_t *SPIx_Handle);
 
 /*
  * Application callback
  */
-void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle,uint8_t AppEv);
+void SPI_ApplicationEventCallback(SPI_Handle_t *SPIx_Handle, SPI_AppEvent_t AppEv);
 
 #endif /* INC_STM32F0XX_SPI_H_ */
