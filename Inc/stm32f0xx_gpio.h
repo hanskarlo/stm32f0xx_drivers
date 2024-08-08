@@ -24,7 +24,7 @@ typedef enum
 {
 	LOW,
 	HIGH
-}GPIOPinState;
+}GPIO_PinState_t;
 
 
 
@@ -79,7 +79,7 @@ typedef struct
 
 
 
-/**
+/*
  * GPIO Port Configs
  */
 #define INPUT			0
@@ -130,7 +130,7 @@ void GPIO_DeInit(GPIO_Reg_t *GPIOx);
 /*
  * Set/Disable GPIOx clock
  */
-void GPIO_PeriphClkCtrl(GPIO_Reg_t* GPIOx, State clkState);
+void GPIO_PCLK_Ctrl(GPIO_Reg_t* GPIOx, State clkState);
 
 /*
  * Read GPIOx pin
@@ -145,7 +145,7 @@ uint16_t GPIO_ReadPort(GPIO_Reg_t* GPIOx);
 /*
  * Write to GPIOx pin
  */
-void GPIO_WritePin(GPIO_Reg_t* GPIOx, uint8_t PinNo, GPIOPinState pinState);
+void GPIO_WritePin(GPIO_Reg_t* GPIOx, uint8_t PinNo, GPIO_PinState_t pinState);
 
 /*
  * Write to GPIOx port
@@ -163,7 +163,7 @@ void GPIO_TogglePin(GPIO_Reg_t* GPIOx, uint8_t PinNo);
 bool GPIO_IRQConfig(uint8_t IRQ_No, uint8_t IRQ_Prio, State toggle);
 
 /*
- *
+ * 
  */
 void GPIO_IRQHandler(uint8_t PinNo);
 

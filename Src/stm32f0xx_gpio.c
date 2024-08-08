@@ -18,7 +18,7 @@
  * @param GPIOx GPIOx register type (stm32f0xx_gpio.h)
  * @param clkState ENABLE or DISABLE
  */
-void GPIO_PeriphClkCtrl(GPIO_Reg_t* GPIOx, State clkState)
+void GPIO_PCLK_Ctrl(GPIO_Reg_t* GPIOx, State clkState)
 {
 	if (clkState == ENABLE)
 	{
@@ -249,17 +249,55 @@ void GPIO_TogglePin(GPIO_Reg_t* GPIOx, uint8_t pinNo)
  * @param irq_priority -- IRQ priority (0-3, representing priority value 0-192 in steps of 64)
  * @param toggle -- ENABLE or DISABLE interrupt
  */
-bool GPIO_IRQConfig(uint8_t irqNo, uint8_t irq_priority, State toggle)
+bool GPIO_IRQConfig(GPIO_Handle_t* gpio, uint8_t irqNo, uint8_t irq_priority, State toggle)
 {
-    // Check IRQ number cooresponds to assigned vector
-    if ((irqNo != IRQ_POS_EXTI0_1) || (irqNo != IRQ_POS_EXTI2_3) || (irqNo != IRQ_POS_EXTI2_3))
+    // Check if valid pin number
+    uint8_t pinNum = gpio->GPIO_Config.GPIO_PinNo;
+    if (pinNum < GPIO_0 || pinNum > GPIO_15)
+        return false;
+
+    // Check IRQ number corresponds to assigned vector
+    if ((irqNo != EXTI0_1) || (irqNo != EXTI2_3))
+        return false;
+    
+
+    // Check IRQ priority
+    if (irq_priority < IRQ_PRIO_0 || irq_priority > IRQ_PRIO_192)
         return false;
 
 
+    // Map GPIO pin to EXTIx input
+    uint8_t exticr_pin_value = 0;
+
+    if (gpio->GPIOx == GPIOA)
+        exticr_pin_value = 0;
+	else if (gpio->GPIOx == GPIOB)
+        exticr_pin_value = 1;
+	else if (gpio->GPIOx == GPIOC)
+        exticr_pin_value = 2;
+	else if (gpio->GPIOx == GPIOD)
+        exticr_pin_value = 3;
+	else if (gpio->GPIOx == GPIOE)
+        exticr_pin_value = 4;
+    else if (gpio->GPIOx == GPIOF)
+        exticr_pin_value = 5;
+    else 
+        return false;
+
+    SYSCFG->EXTICR[pinNum / 4] |= ((4 % pinNum) << exticr_pin_value);
+
+
+    // Enable/Disable IRQ
 	if (toggle == ENABLE)
+    {
 		*NVIC_ISER |=  (1 << irqNo);
-	else
+    }
+	else if (toggle == DISABLE)
+    {
 		*NVIC_ICER &= ~(1 << irqNo);
+        return false;
+    }
+    else return false;
 
 
 	// Configure interrupt priority
