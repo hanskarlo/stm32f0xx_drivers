@@ -267,7 +267,7 @@ bool GPIO_IRQConfig(GPIO_Handle_t* gpio, uint8_t irqNo, uint8_t irq_priority, St
 
 
     // Map GPIO pin to EXTIx input
-    uint8_t exticr_pin_value = 0;
+    uint8_t exticr_pin_value = 0; // Register bit value corresponding to pin number
 
     if (gpio->GPIOx == GPIOA)
         exticr_pin_value = 0;
@@ -308,16 +308,3 @@ bool GPIO_IRQConfig(GPIO_Handle_t* gpio, uint8_t irqNo, uint8_t irq_priority, St
 
     return true;
 }
-
-
-/**
- * @brief 
- * 
- */
-void GPIO_IRQHandler()
-{
-    // TODO: IRQ Handler
-}
-
-
-

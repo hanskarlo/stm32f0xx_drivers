@@ -12,6 +12,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "stm32f0xx_gpio.h"
+#include "stm32f0xx_rcc.h"
+#include "stm32f0xx_spi.h"
+#include "stm32f0xx_i2c.h"
+#include "stm32f0xx_usart.h"
+#include "stm32f0xx_crc.h"
+
 #define __weak __attribute__((weak))
 
 /*
@@ -37,7 +44,7 @@
  */
 #define MAIN_FLASH_MEM_BASE_ADDR		0x08000000U
 #define SRAM_BASE_ADDR					0x20000000U
-#define ROM_ADDR						0x1FFFX800U
+#define ROM_ADDR						0x1FFFC800U
 
 
 #define SRAM_SIZE			0x4000U
@@ -334,10 +341,18 @@ typedef struct{
 /**
  * EXTI Line IRQ Positions
  */
-#define IRQ_POS_EXTI0_1			5
-#define IRQ_POS_EXTI2_3			6
-#define IRQ_POS_EXTI4_15		7
+#define EXTI0_1			5
+#define EXTI2_3			6
+#define EXTI4_15		7
 
+
+/*
+ * 
+ */
+#define IRQ_PRIO_0      0
+#define IRQ_PRIO_48     1
+#define IRQ_PRIO_96     2
+#define IRQ_PRIO_192    3
 
 
 /**
