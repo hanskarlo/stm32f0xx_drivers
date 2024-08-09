@@ -42,7 +42,7 @@ int main(void)
     GPIO_Init(&intPin);
 
     // Configure interrupt EXTI for GPIO
-    if (!GPIO_IRQConfig(&intPin, EXTI0_1, IRQ_PRIO_48, ENABLE)) return 0;
+    if (!GPIO_IRQConfig(EXTI0_1, IRQ_PRIO_48, ENABLE)) return 0;
 
     // Initialize state of GPIO A1
     GPIO_WritePin(&togglePin.GPIOx, togglePin.GPIO_Config.GPIO_PinNo, LOW);

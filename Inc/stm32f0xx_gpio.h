@@ -160,7 +160,7 @@ void GPIO_TogglePin(GPIO_Reg_t* GPIOx, uint8_t PinNo);
 /*
  * IRQ config and ISR handling
  */
-bool GPIO_IRQConfig(GPIO_Handle_t* gpio, uint8_t IRQ_No, uint8_t IRQ_Prio, State toggle);
+bool GPIO_IRQConfig(uint8_t IRQ_No, uint8_t IRQ_Prio, State toggle);
 
 
 
