@@ -13,6 +13,7 @@
 #include <stdbool.h>
 
 #include "stm32f0xx_gpio.h"
+#include "stm32f0xx_timer.h"
 #include "stm32f0xx_rcc.h"
 #include "stm32f0xx_spi.h"
 #include "stm32f0xx_i2c.h"
@@ -95,6 +96,9 @@
  * Base addresses of peripherals on APB Bus
  */
 
+#define TIM6_APB_ADDR                       0x40001000U
+#define TIM7_APB_ADDR                       0x40001400U
+
 #define SPI1_PERIPH_ADDR					0x40013000U
 #define SPI2_PERIPH_ADDR					0x40003800U
 
@@ -139,6 +143,23 @@ typedef struct
 	volatile uint32_t BRR;
 }GPIO_Reg_t;
 
+
+/**
+ * @brief Basic timer (Timer 6/7) register typedef 
+ * struct.
+ * 
+ */
+typedef struct 
+{
+    volatile uint32_t CR1;
+    volatile uint32_t CR2;
+    volatile uint32_t DIER;
+    volatile uint32_t SR;
+    volatile uint32_t EGR;
+    volatile uint32_t CNT;
+    volatile uint32_t PSC;
+    volatile uint32_t ARR;
+}BasicTimer_Reg_t;
 
 
 
@@ -268,7 +289,14 @@ typedef struct{
 #define GPIOF 							((GPIO_Reg_t*)GPIOF_PERIPH_ADDR)
 
 
-/*
+/**
+ *  Timer peripheral registers typcasted to timer register struct types
+ */
+#define TIM6                            ((BasicTimer_Reg_t*)TIM6_APB_ADDR)
+#define TIM7                            ((BasicTimer_Reg_t*)TIM7_APB_ADDR)
+
+
+/**
  * SPI Peripheral register
  */
 #define SPI1							((SPI_Reg_t*)SPI1_PERIPH_ADDR)
@@ -373,6 +401,15 @@ typedef struct{
 #define GPIOE_CLK_DISABLE()		RCC->AHBENR &= ~(1 << 21)
 #define GPIOF_CLK_DISABLE()		RCC->AHBENR &= ~(1 << 22)
 
+
+/**
+ * Clock enable macros for Timer peripherals
+ */
+#define TIM6_PCLK_ENABLE()      RCC->APB1ENR |= (1 << 4)
+#define TIM7_PCLK_ENABLE()      RCC->APB1ENR |= (1 << 5)
+
+#define TIM6_PCLK_DISABLE()     RCC->APB1ENR &= ~(1 << 4)
+#define TIM7_PCLK_DISABLE()     RCC->APB1ENR &= ~(1 << 5)   
 
 
 /**
