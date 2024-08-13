@@ -153,13 +153,25 @@ typedef struct
 {
     volatile uint32_t CR1;
     volatile uint32_t CR2;
+    volatile uint32_t SMCR;
     volatile uint32_t DIER;
     volatile uint32_t SR;
     volatile uint32_t EGR;
+    volatile uint32_t CCMR1;
+    volatile uint32_t CCMR2;
+    volatile uint32_t CCER;
     volatile uint32_t CNT;
     volatile uint32_t PSC;
     volatile uint32_t ARR;
-}BasicTimer_Reg_t;
+    volatile uint32_t RCR;
+    volatile uint32_t CCR1;
+    volatile uint32_t CCR2;
+    volatile uint32_t CCR3;
+    volatile uint32_t CCR4;
+    volatile uint32_t BTDR;
+    volatile uint32_t DCR;
+    volatile uint32_t DMAR;
+}Timer_Reg_t;
 
 
 
@@ -292,8 +304,8 @@ typedef struct{
 /**
  *  Timer peripheral registers typcasted to timer register struct types
  */
-#define TIM6                            ((BasicTimer_Reg_t*)TIM6_APB_ADDR)
-#define TIM7                            ((BasicTimer_Reg_t*)TIM7_APB_ADDR)
+#define TIM6                            ((Timer_Reg_t*)TIM6_APB_ADDR)
+#define TIM7                            ((Timer_Reg_t*)TIM7_APB_ADDR)
 
 
 /**
