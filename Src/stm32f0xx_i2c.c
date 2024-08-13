@@ -217,6 +217,9 @@ void I2C_ReceiveData(I2C_Handle_t *I2Cx_Handle, uint8_t *rxBuffer, uint8_t dataL
  */
 void I2C_IRQInterruptConfig(I2C_Handle_t I2Cx_Handle, State enable, uint8_t irq_priority)
 {
+    if (irq_priority < 0 || irq_priority > 3)
+        return;
+
     // Determine IRQ number based on I2Cx
     uint8_t irq_num;
     if (I2Cx_Handle.I2Cx == I2C1)
@@ -229,7 +232,7 @@ void I2C_IRQInterruptConfig(I2C_Handle_t I2Cx_Handle, State enable, uint8_t irq_
         *NVIC_ISER |= (1 << irq_num);
     else if (enable == DISABLE)
         *NVIC_ICER |= (1 << irq_num);
-    
+
 
     // Configure interrupt priority
 	uint8_t ipr_num = irq_num / 4;
