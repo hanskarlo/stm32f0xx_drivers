@@ -11,6 +11,12 @@
  */
 
 
+/**
+ * @brief Timer peripheral clock control.
+ * 
+ * @param TIMx Timer register type (stm32f0xx_timer.h)
+ * @param state ENABLE or DISABLE
+ */
 static void TIM_PCLK_Ctrl(Timer_Reg_t *TIMx, State state)
 {
     if (state == ENABLE)
@@ -30,6 +36,14 @@ static void TIM_PCLK_Ctrl(Timer_Reg_t *TIMx, State state)
 }
 
 
+/**
+ * @brief TIMx peripheral initialization using configuration
+ * parameters from TIMx handle type.
+ * 
+ * @param TIMx_Handle TIMx handle type (stm32f0xx_timer.h)
+ * @return true if initialization success,
+ * @return false if failed
+ */
 const bool TIM_Init(TIMx_Handle_t *TIMx_Handle)
 {
     TIM_PCLK_Ctrl(TIMx_Handle->TIMx, ENABLE);
@@ -56,34 +70,63 @@ const bool TIM_Init(TIMx_Handle_t *TIMx_Handle)
 }
 
 
+/**
+ * @brief Starts timer.
+ * 
+ * @param TIMx_Handle 
+ */
 void TIM_Start(TIMx_Handle_t *TIMx_Handle)
 {
     TIMx_Handle->TIMx->CR1 |= (1 << TIM_CR1_CEN);
 }
 
 
+/**
+ * @brief Stops timer.
+ * 
+ * @param TIMx_Handle 
+ */
 void TIM_Stop(TIMx_Handle_t *TIMx_Handle)
 {
     TIMx_Handle->TIMx->CR1 &= ~(1 << TIM_CR1_CEN);
 }
 
 
-const bool TIM_DeInit(TIMx_Handle_t *TIMx_Handle)
+/**
+ * @brief Deinitialize timer. Stops timer, then 
+ * disables peripheral clock.
+ * 
+ * @param TIMx_Handle 
+ */
+void TIM_DeInit(TIMx_Handle_t *TIMx_Handle)
 {
     TIM_Stop(&TIMx_Handle);
 
     TIM_PCLK_Ctrl(TIMx_Handle->TIMx, DISABLE);
-
-    return true;
 }
 
 
+/**
+ * @brief Set timer count/period.
+ * 
+ * @param TIMx_Handle 
+ * @param period 
+ */
 void TIM_SetPeriod(TIMx_Handle_t *TIMx_Handle, uint16_t period)
 {
     TIMx_Handle->TIMx->ARR = period;
 }
 
 
+/**
+ * @brief TIMx peripheral interrupt configuration.
+ * 
+ * @param TIMx_Handle TIMx handle type (stm32f0xx_timer.h)
+ * @param state ENABlE or DISABLE
+ * @param priority IRQ priority (0-3, representing priority value 0-192 in steps of 64)
+ * @return true if successfully configured,
+ * @return false if failed (invalid state, priority number, etc)
+ */
 const bool TIM_IRQ_Config(TIMx_Handle_t *TIMx_Handle, State state, uint8_t priority)
 {
     // Get IRQ position based on TIMx
@@ -112,19 +155,25 @@ const bool TIM_IRQ_Config(TIMx_Handle_t *TIMx_Handle, State state, uint8_t prior
         return false;
 
 
-    // Configure interrupt priority
-	uint8_t IPR_No = irq_num / 4;
-	uint8_t byte_offset = irq_num % 4;
-	*((uint8_t *)NVIC_IPR0 + (IPR_No * 4)) |= ( priority << ((8 * byte_offset) + 6) );
-
-
     // Enable interrupt in NVIC
     if (state == ENABLE)
+    {
+        // Configure interrupt priority
+        uint8_t IPR_No = irq_num / 4;
+        uint8_t byte_offset = irq_num % 4;
+        *((uint8_t *)NVIC_IPR0 + (IPR_No * 4)) |= ( priority << ((8 * byte_offset) + 6) );
+
+        // Set interrupt in NVIC_ISER
         *NVIC_ISER |= (1 << irq_num);
+    }
     else if (state == DISABLE)
+    {
         *NVIC_ICER |= (1 << irq_num);
+    }
     else
+    {
         return false;
+    }
 
 
     return true;

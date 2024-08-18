@@ -77,7 +77,7 @@ typedef struct TIMx_Handle_t
 
 
 const bool TIM_Init(TIMx_Handle_t *TIMx_Handle);
-const bool TIM_DeInit(TIMx_Handle_t *TIMx_Handle);
+void TIM_DeInit(TIMx_Handle_t *TIMx_Handle);
 
 void TIM_Start(TIMx_Handle_t *TIMx_Handle);
 void TIM_Stop(TIMx_Handle_t *TIMx_Handle);
