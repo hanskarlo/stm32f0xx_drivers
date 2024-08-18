@@ -96,8 +96,21 @@
  * Base addresses of peripherals on APB Bus
  */
 
-#define TIM6_APB_ADDR                       0x40001000U
-#define TIM7_APB_ADDR                       0x40001400U
+#define TIM1_PERIPH_ADDR                       0x40012C00U
+
+#define TIM2_PERIPH_ADDR                       0x40000000U
+#define TIM3_PERIPH_ADDR                       0x40000400U
+
+#define TIM6_PERIPH_ADDR                       0x40001000U
+#define TIM7_PERIPH_ADDR                       0x40001400U
+
+#define TIM14_PERIPH_ADDR                      0x40002000U
+
+#define TIM15_PERIPH_ADDR                      0x40014000U
+#define TIM16_PERIPH_ADDR                      0x40014400U
+#define TIM17_PERIPH_ADDR                      0x40014800U
+
+#define TIM7_PERIPH_ADDR                       0x40001400U
 
 #define SPI1_PERIPH_ADDR					0x40013000U
 #define SPI2_PERIPH_ADDR					0x40003800U
@@ -145,32 +158,32 @@ typedef struct
 
 
 /**
- * @brief Basic timer (Timer 6/7) register typedef 
- * struct.
+ * @brief Basic, General Purpose, and
+ *  Advanced Timer register struct.
  * 
  */
 typedef struct 
-{
-    volatile uint32_t CR1;
-    volatile uint32_t CR2;
-    volatile uint32_t SMCR;
-    volatile uint32_t DIER;
-    volatile uint32_t SR;
-    volatile uint32_t EGR;
-    volatile uint32_t CCMR1;
-    volatile uint32_t CCMR2;
-    volatile uint32_t CCER;
-    volatile uint32_t CNT;
-    volatile uint32_t PSC;
-    volatile uint32_t ARR;
-    volatile uint32_t RCR;
-    volatile uint32_t CCR1;
-    volatile uint32_t CCR2;
-    volatile uint32_t CCR3;
-    volatile uint32_t CCR4;
-    volatile uint32_t BTDR;
-    volatile uint32_t DCR;
-    volatile uint32_t DMAR;
+{                               // Offset
+    volatile uint32_t CR1;      // 0x00
+    volatile uint32_t CR2;      // 0x04
+    volatile uint32_t SMCR;     // 0x08
+    volatile uint32_t DIER;     // 0x0C
+    volatile uint32_t SR;       // 0x10
+    volatile uint32_t EGR;      // 0x14
+    volatile uint32_t CCMR1;    // 0x18
+    volatile uint32_t CCMR2;    // 0x1C
+    volatile uint32_t CCER;     // 0x20
+    volatile uint32_t CNT;      // 0x24
+    volatile uint32_t PSC;      // 0x28
+    volatile uint32_t ARR;      // 0x2C
+    volatile uint32_t RCR;      // 0x30
+    volatile uint32_t CCR1;     // 0x34
+    volatile uint32_t CCR2;     // 0x38
+    volatile uint32_t CCR3;     // 0x3C
+    volatile uint32_t CCR4;     // 0x40
+    volatile uint32_t BTDR;     // 0x44
+    volatile uint32_t DCR;      // 0x48
+    volatile uint32_t DMAR;     // 0x4C
 }Timer_Reg_t;
 
 
@@ -304,8 +317,15 @@ typedef struct{
 /**
  *  Timer peripheral registers typcasted to timer register struct types
  */
-#define TIM6                            ((Timer_Reg_t*)TIM6_APB_ADDR)
-#define TIM7                            ((Timer_Reg_t*)TIM7_APB_ADDR)
+#define TIM1                            ((Timer_Reg_t*)TIM1_PERIPH_ADDR)
+#define TIM2                            ((Timer_Reg_t*)TIM2_PERIPH_ADDR)
+#define TIM3                            ((Timer_Reg_t*)TIM3_PERIPH_ADDR)
+#define TIM6                            ((Timer_Reg_t*)TIM6_PERIPH_ADDR)
+#define TIM7                            ((Timer_Reg_t*)TIM7_PERIPH_ADDR)
+#define TIM14                           ((Timer_Reg_t*)TIM14_PERIPH_ADDR)
+#define TIM15                           ((Timer_Reg_t*)TIM15_PERIPH_ADDR)
+#define TIM16                           ((Timer_Reg_t*)TIM16_PERIPH_ADDR)
+#define TIM17                           ((Timer_Reg_t*)TIM17_PERIPH_ADDR)
 
 
 /**
