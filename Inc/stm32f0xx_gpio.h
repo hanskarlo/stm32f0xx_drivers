@@ -135,7 +135,7 @@ void GPIO_PCLK_Ctrl(GPIO_Reg_t* GPIOx, State clkState);
 /*
  * Read GPIOx pin
  */
-uint8_t GPIO_ReadPin(GPIO_Reg_t* GPIOx, uint8_t PinNo);
+uint8_t GPIO_ReadPin(GPIO_Handle_t *GPIOx);
 
 /*
  * Read GPIOx port
@@ -145,7 +145,7 @@ uint16_t GPIO_ReadPort(GPIO_Reg_t* GPIOx);
 /*
  * Write to GPIOx pin
  */
-void GPIO_WritePin(GPIO_Reg_t* GPIOx, uint8_t PinNo, GPIO_PinState_t pinState);
+void GPIO_WritePin(GPIO_Handle_t* GPIOx, GPIO_PinState_t pinState);
 
 /*
  * Write to GPIOx port
@@ -155,12 +155,12 @@ void GPIO_WritePort(GPIO_Reg_t* GPIOx, uint16_t regValue);
 /*
  * Toggle GPIOx output pin
  */
-void GPIO_TogglePin(GPIO_Reg_t* GPIOx, uint8_t PinNo);
+void GPIO_TogglePin(GPIO_Handle_t* GPIOx);
 
 /*
  * IRQ config and ISR handling
  */
-bool GPIO_IRQConfig(uint8_t IRQ_No, uint8_t IRQ_Prio, State toggle);
+const bool GPIO_IRQConfig(uint8_t IRQ_No, uint8_t IRQ_Prio, State toggle);
 
 
 

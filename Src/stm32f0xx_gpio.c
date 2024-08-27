@@ -184,14 +184,15 @@ void GPIO_DeInit(GPIO_Reg_t *GPIOx)
 
 
 /**
- * @brief Read digital pin
- *
- * @param GPIO_Reg_t -- GPIO port register map struct
- * @param uint8_t pinNo -- Pin number (0-15)
+ * @brief 
+ * 
+ * @param GPIOx GPIOx handler struct (stm32f0xx_gpio.h)
+ * @param pinNo uint8_t pin number
+ * @return uint8_t 
  */
-uint8_t GPIO_ReadPin(GPIO_Reg_t *GPIOx, uint8_t pinNo)
+uint8_t GPIO_ReadPin(GPIO_Handle_t *GPIOx)
 {
-	uint8_t val = ( (GPIOx->IDR) >> pinNo ) & 0x00000001;
+	uint8_t val = ( (GPIOx->GPIOx->IDR) >> GPIOx->GPIO_Config.GPIO_PinNo) & 0x01U;
 
 	return val;
 }
@@ -202,40 +203,56 @@ uint8_t GPIO_ReadPin(GPIO_Reg_t *GPIOx, uint8_t pinNo)
 /**
  * @brief Write digital pin to state
  *
- * @param GPIO_Reg_t GPIOx register map struct (stm32f0xx_gpio.h)
- * @param pinNo Pin number (0-15)
+ * @param GPIOx GPIOx register map struct (stm32f0xx_gpio.h)
  * @param value Pin binary logic level (0,1)
  */
-void GPIO_WritePin(GPIO_Reg_t* GPIOx, uint8_t PinNo, GPIO_PinState_t pinState)
+void GPIO_WritePin(GPIO_Handle_t* GPIOx, GPIO_PinState_t pinState)
 {
 	if (pinState == HIGH)
-		GPIOx->ODR |= (1 << PinNo);
-	else
-		GPIOx->ODR |= ~(1 << PinNo);
+		GPIOx->GPIOx->ODR |= (1 << GPIOx->GPIO_Config.GPIO_PinNo);
+	else if (pinState == LOW)
+		GPIOx->GPIOx->ODR |= ~(1 << GPIOx->GPIO_Config.GPIO_PinNo);
 }
 
 
 /**
  * @brief Write entire Portx state (x = A to F).
  * 
- * @param GPIOx GPIOx register map struct (stm32f0xx_gpio.h)
+ * @param GPIOx GPIOx handle struct (stm32f0xx_gpio.h)
  * @param regValue Port logic level (0x0000, 0xFFFF)
  */
 void GPIO_WritePort(GPIO_Reg_t* GPIOx, uint16_t regValue)
 {
-	GPIOx->ODR = regValue;
+	if (GPIOx == GPIOA)
+		GPIOA->ODR |= regValue;
+
+	else if (GPIOx == GPIOB)
+		GPIOB->ODR |= regValue;
+
+	else if (GPIOx == GPIOC)
+		GPIOC->ODR |= regValue;
+
+	else if (GPIOx == GPIOD)
+		GPIOD->ODR |= regValue;
+
+	else if (GPIOx == GPIOE)
+		GPIOE->ODR |= regValue;
+
+	else if (GPIOx == GPIOF)
+		GPIOF->ODR |= regValue;
+
 }
 
 
 /**
  * @brief Toggle pin
  * 
- * @param GPIOx GPIOx register map struct (stm32f0xx_gpio.h)
+ * @param GPIOx GPIOx handler struct (stm32f0xx_gpio.h)
  * @param PinNo Pin number
  */
-void GPIO_TogglePin(GPIO_Reg_t* GPIOx, uint8_t pinNo)
+void GPIO_TogglePin(GPIO_Handle_t* GPIOx)
 {
-	GPIOx->ODR ^= (1 << pinNo);
+	GPIOx->GPIOx->ODR ^= (1 << GPIOx->GPIO_Config.GPIO_PinNo);
 }
 
 
@@ -246,7 +263,7 @@ void GPIO_TogglePin(GPIO_Reg_t* GPIOx, uint8_t pinNo)
  * @param irq_priority -- IRQ priority (0-3, representing priority value 0-192 in steps of 64)
  * @param toggle -- ENABLE or DISABLE interrupt
  */
-bool GPIO_IRQConfig(uint8_t irqNo, uint8_t irq_priority, State toggle)
+const bool GPIO_IRQConfig(uint8_t irqNo, uint8_t irq_priority, State toggle)
 {
     // Check IRQ number corresponds to assigned vector
     if ((irqNo != EXTI0_1) || (irqNo != EXTI2_3))

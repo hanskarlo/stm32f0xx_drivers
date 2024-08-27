@@ -54,9 +54,9 @@ int main(void)
 
 void EXTI0_1_IRQHandler(void)
 {
-    GPIO_TogglePin(&togglePin.GPIOx, togglePin.GPIO_Config.GPIO_PinNo);
+    GPIO_TogglePin(&intPin);
 
     // In this example, clears pending bits on register EXTIPR for lines 0-1
-    // In practice IRQ handler, should consider which EXTI line is being used, and what pin
+    // In practice IRQ handler should consider which EXTI line is being used, and what pin
     EXTI->PR &= ~(0xFFFFFFFC);
 }
