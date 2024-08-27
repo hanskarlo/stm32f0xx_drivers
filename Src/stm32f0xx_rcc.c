@@ -38,8 +38,10 @@ uint32_t RCC_Get_PCLK(void)
     uint8_t SWS = (RCC->CFGR >> RCC_CFGR_SWS) & 0x03U;
 
     // Clock source
-    if (SWS == RCC_HSI_USED || SWS == RCC_HSE_USED) //! HSI and HSE both 8MHz on STM32F072RB-Disco
+    if (SWS == RCC_HSI_USED)
         SYSCLK = HSI_FREQ_HZ;
+    else if (SWS == RCC_HSE_USED)
+        SYSCLK = _HSE_FREQ_HZ;
     else if (SWS == RCC_HSE_USED)
         SYSCLK = RCC_Get_PLLCLK();
     else if (SWS == RCC_HSI48_USED)
