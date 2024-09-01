@@ -12,13 +12,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "stm32f0xx_gpio.h"
-#include "stm32f0xx_timer.h"
-#include "stm32f0xx_rcc.h"
-#include "stm32f0xx_spi.h"
-#include "stm32f0xx_i2c.h"
-#include "stm32f0xx_usart.h"
-#include "stm32f0xx_crc.h"
 
 #define __weak __attribute__((weak))
 
@@ -502,9 +495,13 @@ typedef struct{
 
 
 
-
-
-
+#include "stm32f0xx_gpio.h"
+#include "stm32f0xx_timer.h"
+#include "stm32f0xx_rcc.h"
+#include "stm32f0xx_spi.h"
+#include "stm32f0xx_i2c.h"
+#include "stm32f0xx_usart.h"
+#include "stm32f0xx_crc.h"
 
 
 #endif /* INC_STM32F0XX_H_ */
