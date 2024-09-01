@@ -148,7 +148,19 @@ bool I2C_SendData(I2C_Handle_t *I2Cx_Handle, uint8_t *txBuffer, uint8_t dataLen,
     // Write data into TXDR
     while (dataLen > 0)
     {
-        while( !(I2Cx_Handle->I2Cx->ISR & (1 << I2C_ISR_TXIS)) ); // Block till TXDR empty
+        while( !(I2Cx_Handle->I2Cx->ISR & (1 << I2C_ISR_TXIS)) ) // Block till TXDR empty
+        {
+            // Check if device NACK
+            if (I2Cx_Handle->I2Cx->ISR & (1 << I2C_ISR_NACKF)
+             || I2Cx_Handle->I2Cx->ISR & (1 << I2C_ISR_STOPF))
+            {
+                // Clear NACKF and STOPF flags
+                I2Cx_Handle->I2Cx->ICR &= ~(1 << 4);
+                I2Cx_Handle->I2Cx->ICR &= ~(1 << 5);
+
+                return false;
+            }
+        } 
 
         I2Cx_Handle->I2Cx->TXDR = *txBuffer;
         txBuffer++;
@@ -172,9 +184,8 @@ bool I2C_SendData(I2C_Handle_t *I2Cx_Handle, uint8_t *txBuffer, uint8_t dataLen,
  * @param rxBuffer Buffer to store rx bytes
  * @param dataLen Length of expected rx buffer
  * @param agentAddr Slave address 
- * @param Sr 
  */
-void I2C_ReceiveData(I2C_Handle_t *I2Cx_Handle, uint8_t *rxBuffer, uint8_t dataLen, uint8_t agentAddr, uint8_t Sr)
+void I2C_ReceiveData(I2C_Handle_t *I2Cx_Handle, uint8_t *rxBuffer, uint8_t dataLen, uint8_t agentAddr)
 {
     // Set addressing mode
     I2Cx_Handle->I2Cx->CR2 &= ~(1 << I2C_CR2_ADD10); // 7-bit
