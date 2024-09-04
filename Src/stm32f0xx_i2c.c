@@ -59,7 +59,7 @@ void I2C_PeriClockControl(I2C_Reg_t *I2Cx, State enable)
  * @note Invoke after configuring corresponding GPIO.
  * 
  * @param I2Cx_Handle I2Cx handle type
- * @param master true if controlelr, false if agent
+ * @param master true if controller, false if agent
  */
 void I2C_Init(I2C_Handle_t *I2Cx_Handle, bool controller)
 {
@@ -197,7 +197,7 @@ void I2C_ReceiveData(I2C_Handle_t *I2Cx_Handle, uint8_t *rxBuffer, uint8_t dataL
     I2Cx_Handle->I2Cx->CR2 |= (1 << I2C_CR2_RD_WRN); // Read
 
     // Number of bytes in send
-    I2Cx_Handle->I2Cx->CR2 |= ~(dataLen << I2C_CR2_NBYTES);
+    I2Cx_Handle->I2Cx->CR2 |= (dataLen << I2C_CR2_NBYTES);
 
     //* Above params must be set before start generated
     // Generate START
@@ -208,7 +208,7 @@ void I2C_ReceiveData(I2C_Handle_t *I2Cx_Handle, uint8_t *rxBuffer, uint8_t dataL
     {
         while( !(I2Cx_Handle->I2Cx->ISR & (1 << I2C_ISR_RXNE)) ); // Block till RXDR not empty
 
-        *rxBuffer = I2Cx_Handle->I2Cx->RXDR;
+        *rxBuffer = (uint8_t) I2Cx_Handle->I2Cx->RXDR;
         rxBuffer++;
         dataLen--;
     }

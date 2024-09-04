@@ -160,7 +160,7 @@ void I2C_DeInit(I2C_Reg_t *I2Cx);
  */
 
 bool I2C_SendData(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint8_t dataLen, uint8_t slaveAddr);
-void I2C_ReceiveData(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t dataLen, uint8_t slaveAddr, uint8_t Sr);
+void I2C_ReceiveData(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t dataLen, uint8_t slaveAddr);
 uint8_t I2C_SendDataIT(I2C_Handle_t *I2Cx_Handle,uint8_t *txBuffer, uint32_t len, uint8_t slaveAddr);
 uint8_t I2C_ReceiveDataIT(I2C_Handle_t *I2Cx_Handle,uint8_t *rxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t Sr);
 
