@@ -97,7 +97,7 @@ void USART_Init(USART_Handle_t *USARTxHandle)
     USARTxHandle->USARTx->CR1 &= ~(1 << USART_CR1_OVER8);
 
     // Set baud rate
-    uint32_t f_Clk = RCC_GetPCLKValue();
+    uint32_t f_Clk = RCC_Get_PCLK();
     uint32_t brrValue = ( f_Clk / USARTxHandle->USART_Config.baudRate);
 
     USARTxHandle->USARTx->BRR = brrValue;
