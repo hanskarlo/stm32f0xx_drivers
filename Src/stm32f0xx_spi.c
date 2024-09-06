@@ -353,7 +353,7 @@ void SPI_IRQInterruptConfig(SPI_Handle_t *SPIx_Handle, State state, uint8_t prio
     uint8_t irq_num;
     if (SPIx_Handle->SPIx == SPI1)
         irq_num = SPI1_IRQ_NUM;
-    else if (SPIx_Handle->SPIx == I2C2)
+    else if (SPIx_Handle->SPIx == SPI2)
         irq_num = SPI2_IRQ_NUM;
 
     
@@ -472,6 +472,10 @@ __weak void SPI_ApplicationEventCallback(SPI_Handle_t *SPIx_Handle, SPI_AppEvent
             uint32_t DR = SPIx_Handle->SPIx->DR;
             uint32_t SR = SPIx_Handle->SPIx->SR;
 
+            //? Clear compiler warning
+            (void) DR;
+            (void) SR;
+
             break;
         }
 
@@ -488,10 +492,21 @@ __weak void SPI_ApplicationEventCallback(SPI_Handle_t *SPIx_Handle, SPI_AppEvent
             // Clear MODF bit:
             // Make a read access to the status register
             uint8_t SR = SPIx_Handle->SPIx->SR;
+            //? Clear compiler warning
+            (void) SR;
+
             // Write to CR1 register (re-set MSTR)
             SPIx_Handle->SPIx->CR1 |= (1 << SPI_CR1_MSTR);
             break;
         }
+
+        case SPI_EVENT_RX_CMPLT:
+            // TODO
+            break;
+
+        case SPI_EVENT_TX_CMPLT:
+            // TODO
+            break;
     }
 
 }
