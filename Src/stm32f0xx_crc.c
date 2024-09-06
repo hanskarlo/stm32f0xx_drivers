@@ -89,7 +89,7 @@ const uint32_t CRC_Calculate(uint8_t *data, uint32_t dataLen)
         if (dataLen / 32)
         {
             // Input 32 bits (4 bytes) of data
-            CRC->CRC_DR = *(uint32_t *) data[i];
+            CRC->CRC_DR = *(uint32_t *) &data[i];
 
             // Decrement data length byte counter
             dataLen -= 4;
@@ -100,7 +100,7 @@ const uint32_t CRC_Calculate(uint8_t *data, uint32_t dataLen)
         else if (dataLen / 16)
         {
             // Input 16 bits (2 bytes) of data
-            *(uint16_t *)CRC->CRC_DR = *(uint16_t *) data[i];
+            *(uint16_t *)CRC->CRC_DR = *(uint16_t *) &data[i];
             dataLen -= 2;
             i += 2;
         }
