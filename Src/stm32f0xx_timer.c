@@ -100,7 +100,7 @@ void TIM_Stop(TIMx_Handle_t *TIMx_Handle)
  */
 void TIM_DeInit(TIMx_Handle_t *TIMx_Handle)
 {
-    TIM_Stop(&TIMx_Handle);
+    TIM_Stop(TIMx_Handle);
 
     TIM_PCLK_Ctrl(TIMx_Handle->TIMx, DISABLE);
 }
