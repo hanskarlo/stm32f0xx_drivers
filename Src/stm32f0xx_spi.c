@@ -125,6 +125,7 @@ const bool SPI_Init(SPI_Handle_t *SPIx_Handle)
     SPIx_Handle->SPIx->CR2 &= 0xF7FF; // Reset DS[8:3] bits
 	SPIx_Handle->SPIx->CR2 |= (DS << SPI_CR2_DS);
 
+    SPI_PeripheralControl(SPIx_Handle->SPIx, ENABLE);
 
     return true;
 }
