@@ -208,9 +208,9 @@ uint8_t GPIO_ReadPin(GPIO_Handle_t *GPIOx)
  */
 void GPIO_WritePin(GPIO_Handle_t* GPIOx, GPIO_PinState_t pinState)
 {
-	if (pinState == HIGH)
+	if (pinState == GPIO_HIGH)
 		GPIOx->GPIOx->ODR |= (1 << GPIOx->GPIO_Config.GPIO_PinNo);
-	else if (pinState == LOW)
+	else if (pinState == GPIO_LOW)
 		GPIOx->GPIOx->ODR |= ~(1 << GPIOx->GPIO_Config.GPIO_PinNo);
 }
 

@@ -22,8 +22,8 @@
 
 typedef enum
 {
-	LOW,
-	HIGH
+	GPIO_LOW,
+	GPIO_HIGH
 }GPIO_PinState_t;
 
 
@@ -120,7 +120,9 @@ typedef struct
 /*
  * Initialize GPIOx
  */
+#ifdef __cplusplus
 void GPIO_Init(GPIO_Handle_t *GPIOHandle);
+#endif
 
 /*
  * Deinit GPIOx
