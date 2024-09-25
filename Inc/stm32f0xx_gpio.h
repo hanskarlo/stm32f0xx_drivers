@@ -111,6 +111,19 @@ typedef struct
 #define PULL_UP		1
 #define PULL_DOWN	2
 
+/*
+ * Alternate functions
+ */
+#define GPIO_AF0    0
+#define GPIO_AF1	1
+#define GPIO_AF2	2
+#define GPIO_AF3	3
+#define GPIO_AF4	4
+#define GPIO_AF5	5
+#define GPIO_AF6	6
+#define GPIO_AF7	7
+
+
 
 
 /***********************************
@@ -120,9 +133,7 @@ typedef struct
 /*
  * Initialize GPIOx
  */
-#ifdef __cplusplus
 void GPIO_Init(GPIO_Handle_t *GPIOHandle);
-#endif
 
 /*
  * Deinit GPIOx
