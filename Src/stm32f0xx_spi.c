@@ -105,16 +105,22 @@ const bool SPI_Init(SPI_Handle_t *SPIx_Handle)
 
     // Configure SSM
     if (SSM)
+    {
         SPIx_Handle->SPIx->CR1 |= (SSM << SPI_CR1_SSM);
+    }
     else
+    {
         SPIx_Handle->SPIx->CR1 &= ~(SSM << SPI_CR1_SSM);
 
+        // Configure SSOE
+        if (SSOE)
+            SPIx_Handle->SPIx->CR2 |= (SSOE << SPI_CR2_SSOE);
+        else
+            SPIx_Handle->SPIx->CR2 &= ~(SSOE << SPI_CR2_SSOE);
 
-    // Configure SSOE
-    if (SSOE)
-        SPIx_Handle->SPIx->CR2 |= (SSOE << SPI_CR2_SSOE);
-    else
-        SPIx_Handle->SPIx->CR2 &= ~(SSOE << SPI_CR2_SSOE);
+    }
+
+
 
 
     // Configure device mode MSTR bit

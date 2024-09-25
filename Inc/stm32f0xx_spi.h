@@ -102,14 +102,14 @@ typedef enum
 /*
  * @CPOL
  */
-#define SPI_CPOL_HIGH 1
-#define SPI_CPOL_LOW 0
+#define SPI_CPOL_HIGH   1
+#define SPI_CPOL_LOW    0
 
 /*
  * @CPHA
  */
-#define SPI_CPHA_HIGH 1
-#define SPI_CPHA_LOW 0
+#define SPI_CPHA_SECOND_EDGE    1
+#define SPI_CPHA_FIRST_EDGE     0
 
 /*
  * @SPI_SSM
